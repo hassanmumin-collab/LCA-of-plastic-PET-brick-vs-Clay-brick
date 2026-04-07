@@ -124,6 +124,38 @@
         "water_depletion": { "value": 0, "unit": "liters_per_kg", "source": "Assumption", "notes": "N/A" },
         "particulate_matter": { "value": 0, "unit": "g_pm2.5_per_kg", "source": "Assumption", "notes": "Negligible." },
         "land_use": { "value": 0, "unit": "m2a_per_kg", "source": "Assumption", "notes": "N/A" }
+      },
+      "use_phase": {
+        "climate_change": {
+          "value": 0.125,
+          "unit": "kg_co2e_per_kg",
+          "source": "CEMBUREAU / Industry data",
+          "notes": "Impact of cement mortar production, assuming 0.15 kg mortar per kg of brick."
+        },
+        "energy_demand": {
+          "value": 0.225,
+          "unit": "mj_per_kg",
+          "source": "CEMBUREAU / Industry data",
+          "notes": "Energy for cement production in mortar."
+        },
+        "water_depletion": {
+          "value": 0.03,
+          "unit": "liters_per_kg",
+          "source": "Industry data",
+          "notes": "Water for mixing mortar."
+        },
+        "particulate_matter": {
+          "value": 0.015,
+          "unit": "g_pm2.5_per_kg",
+          "source": "EMEP/EEA (2019)",
+          "notes": "Dust and emissions from cement production."
+        },
+        "land_use": {
+          "value": 0.0003,
+          "unit": "m2a_per_kg",
+          "source": "ReCiPe 2016",
+          "notes": "Land use for quarrying cement raw materials."
+        }
       }
     }
   },

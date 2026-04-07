@@ -17,6 +17,34 @@
             border-bottom: 2px solid #005a9e;
             padding-bottom: 10px;
         }
+        .tabs {
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+        .tab-button.active {
+            background-color: #0078d4;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 6px 12px;
+            border-top: none;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -64,75 +92,152 @@
 </head>
 <body>
     <div class="container">
-        <h1>Life Cycle Assessment (LCA) Data</h1>
-        <p>This document presents the Life Cycle Inventory (LCI) data for the comparison between traditional Clay Bricks and innovative PET Plastic Bricks. All data is normalized to a functional unit of 1 kg of finished brick.</p>
+        <h1>Life Cycle Assessment (LCA) Data and Results</h1>
+        <p>This document presents the Life Cycle Inventory (LCI) data and the final calculated results for the comparison between traditional Clay Bricks and innovative PET Plastic Bricks.</p>
 
-        <h2>Clay Brick Data</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Life Cycle Stage</th>
-                    <th>Impact Category</th>
-                    <th>Value</th>
-                    <th>Unit</th>
-                    <th>Source</th>
-                    <th>Link</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Raw Material Acquisition</td><td>Climate Change</td><td>0.002</td><td>kg CO2e/kg</td><td>Gweilo et al. (2011) adapted</td><td><a href="https://www.researchgate.net/publication/228691033_Life_cycle_assessment_of_bricks_manufacturing_in_the_Gweilo_kiln_in_Botswana" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Energy Demand</td><td>0.03</td><td>MJ/kg</td><td>Christoforou et al. (2016)</td><td><a href="https://www.sciencedirect.com/science/article/abs/pii/S036013231630017X" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Particulate Matter</td><td>0.005</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Land Use</td><td>0.001</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
-                <tr><td>Material Processing</td><td>Climate Change</td><td>0.005</td><td>kg CO2e/kg</td><td>Local industry data adaptation</td><td>N/A</td></tr>
-                <tr><td></td><td>Energy Demand</td><td>0.1</td><td>MJ/kg</td><td>Koroneos & Dompros (2007)</td><td><a href="https://www.sciencedirect.com/science/article/abs/pii/S135943110600235X" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Particulate Matter</td><td>0.01</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
-                <tr><td>Manufacturing</td><td>Climate Change</td><td>0.35</td><td>kg CO2e/kg</td><td>UNEP (2020) Kenya Report</td><td><a href="https://www.unep.org/resources/report/eco-friendly-and-sustainable-urbanisation-kenya" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Energy Demand</td><td>4.5</td><td>MJ/kg</td><td>Local Kenyan brick sector studies</td><td>N/A</td></tr>
-                <tr><td></td><td>Water Depletion</td><td>1.5</td><td>L/kg</td><td>Paper 'Fired-Clay Bricks...'</td><td><a href="https://ascelibrary.org/doi/10.1061/%28ASCE%29ME.1943-5479.0000497" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Particulate Matter</td><td>0.8</td><td>g PM2.5/kg</td><td>WHO / Local air quality studies</td><td>N/A</td></tr>
-                <tr><td></td><td>Land Use</td><td>0.0005</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
-                <tr><td>Transportation</td><td>Climate Change</td><td>0.015</td><td>kg CO2e/kg</td><td>Standard freight emission factors</td><td>N/A</td></tr>
-                <tr><td></td><td>Energy Demand</td><td>0.2</td><td>MJ/kg</td><td>Standard freight energy factors</td><td>N/A</td></tr>
-                <tr><td></td><td>Particulate Matter</td><td>0.002</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
-                <tr><td>Packaging</td><td>Climate Change</td><td>0.001</td><td>kg CO2e/kg</td><td>Ecoinvent</td><td>N/A</td></tr>
-                <tr><td></td><td>Energy Demand</td><td>0.02</td><td>MJ/kg</td><td>Ecoinvent</td><td>N/A</td></tr>
-            </tbody>
-        </table>
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'DataInventory')">Data Inventory</button>
+            <button class="tab-button" onclick="openTab(event, 'Results')">Calculation Results</button>
+        </div>
 
-        <h2>PET Brick Data</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Life Cycle Stage</th>
-                    <th>Impact Category</th>
-                    <th>Value</th>
-                    <th>Unit</th>
-                    <th>Source</th>
-                    <th>Link</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Raw Material Acquisition</td><td>Climate Change</td><td>-2.5</td><td>kg CO2e/kg</td><td>UNEP (2021) 'Waste-to-Energy'</td><td><a href="https://www.unep.org/resources/report/waste-energy-what-are-benefits" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Energy Demand</td><td>0.05</td><td>MJ/kg</td><td>Internal estimate</td><td>N/A</td></tr>
-                <tr><td></td><td>Particulate Matter</td><td>-1.5</td><td>g PM2.5/kg</td><td>World Bank 'What a Waste 2.0'</td><td><a href="https://www.worldbank.org/en/topic/urbandevelopment/publication/what-a-waste-20-a-global-snapshot-of-solid-waste-management-to-2050" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Land Use</td><td>-0.002</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
-                <tr><td>Material Processing</td><td>Climate Change</td><td>0.02</td><td>kg CO2e/kg</td><td>Industry data</td><td>N/A</td></tr>
-                <tr><td></td><td>Energy Demand</td><td>0.3</td><td>MJ/kg</td><td>Recycling industry data</td><td>N/A</td></tr>
-                <tr><td></td><td>Water Depletion</td><td>0.5</td><td>L/kg</td><td>Plastics Recyclers Europe</td><td><a href="https://www.plasticsrecyclers.eu/" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Particulate Matter</td><td>0.001</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
-                <tr><td>Manufacturing</td><td>Climate Change</td><td>0.08</td><td>kg CO2e/kg</td><td>Gjenge Makers (Kenya) interviews</td><td><a href="https://www.gjenge.co.ke/" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Energy Demand</td><td>1.2</td><td>MJ/kg</td><td>Plastics processing industry data</td><td>N/A</td></tr>
-                <tr><td></td><td>Particulate Matter</td><td>0.004</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
-                <tr><td></td><td>Land Use</td><td>0.0005</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
-                <tr><td>Transportation</td><td>Climate Change</td><td>0.015</td><td>kg CO2e/kg</td><td>Standard freight emission factors</td><td>N/A</td></tr>
-                <tr><td></td><td>Energy Demand</td><td>0.2</td><td>MJ/kg</td><td>Standard freight energy factors</td><td>N/A</td></tr>
-                <tr><td></td><td>Particulate Matter</td><td>0.002</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
-                <tr><td>Packaging</td><td>Climate Change</td><td>0.001</td><td>kg CO2e/kg</td><td>Ecoinvent</td><td>N/A</td></tr>
-                <tr><td></td><td>Energy Demand</td><td>0.02</td><td>MJ/kg</td><td>Ecoinvent</td><td>N/A</td></tr>
-            </tbody>
-        </table>
-        <p class="notes"><em>Note: "N/A" for links indicates that the data is from general industry knowledge, standard databases like Ecoinvent, or internal estimates and does not have a direct, single hyperlink.</em></p>
+        <div id="DataInventory" class="tab-content" style="display: block;">
+            <h2>Clay Brick Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Life Cycle Stage</th>
+                        <th>Impact Category</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Source</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Raw Material Acquisition</td><td>Climate Change</td><td>0.002</td><td>kg CO2e/kg</td><td>Gweilo et al. (2011) adapted</td><td><a href="https://www.researchgate.net/publication/228691033_Life_cycle_assessment_of_bricks_manufacturing_in_the_Gweilo_kiln_in_Botswana" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.03</td><td>MJ/kg</td><td>Christoforou et al. (2016)</td><td><a href="https://www.sciencedirect.com/science/article/abs/pii/S036013231630017X" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>0.005</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Land Use</td><td>0.001</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
+                    <tr><td>Material Processing</td><td>Climate Change</td><td>0.005</td><td>kg CO2e/kg</td><td>Local industry data adaptation</td><td>N/A</td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.1</td><td>MJ/kg</td><td>Koroneos & Dompros (2007)</td><td><a href="https://www.sciencedirect.com/science/article/abs/pii/S135943110600235X" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>0.01</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
+                    <tr><td>Manufacturing</td><td>Climate Change</td><td>0.35</td><td>kg CO2e/kg</td><td>UNEP (2020) Kenya Report</td><td><a href="https://www.unep.org/resources/report/eco-friendly-and-sustainable-urbanisation-kenya" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>4.5</td><td>MJ/kg</td><td>Local Kenyan brick sector studies</td><td>N/A</td></tr>
+                    <tr><td></td><td>Water Depletion</td><td>1.5</td><td>L/kg</td><td>Paper 'Fired-Clay Bricks...'</td><td><a href="https://ascelibrary.org/doi/10.1061/%28ASCE%29ME.1943-5479.0000497" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>0.8</td><td>g PM2.5/kg</td><td>WHO / Local air quality studies</td><td>N/A</td></tr>
+                    <tr><td></td><td>Land Use</td><td>0.0005</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
+                    <tr><td>Transportation</td><td>Climate Change</td><td>0.015</td><td>kg CO2e/kg</td><td>Standard freight emission factors</td><td>N/A</td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.2</td><td>MJ/kg</td><td>Standard freight energy factors</td><td>N/A</td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>0.002</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
+                    <tr><td>Packaging</td><td>Climate Change</td><td>0.001</td><td>kg CO2e/kg</td><td>Ecoinvent</td><td>N/A</td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.02</td><td>MJ/kg</td><td>Ecoinvent</td><td>N/A</td></tr>
+                    <tr><td>Use Phase (Mortar)</td><td>Climate Change</td><td>0.125</td><td>kg CO2e/kg</td><td>CEMBUREAU / Industry data</td><td>N/A</td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.225</td><td>MJ/kg</td><td>CEMBUREAU / Industry data</td><td>N/A</td></tr>
+                    <tr><td></td><td>Water Depletion</td><td>0.03</td><td>L/kg</td><td>Industry data</td><td>N/A</td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>0.015</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Land Use</td><td>0.0003</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
+                </tbody>
+            </table>
+
+            <h2>PET Brick Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Life Cycle Stage</th>
+                        <th>Impact Category</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Source</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Raw Material Acquisition</td><td>Climate Change</td><td>-2.5</td><td>kg CO2e/kg</td><td>UNEP (2021) 'Waste-to-Energy'</td><td><a href="https://www.unep.org/resources/report/waste-energy-what-are-benefits" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.05</td><td>MJ/kg</td><td>Internal estimate</td><td>N/A</td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>-1.5</td><td>g PM2.5/kg</td><td>World Bank 'What a Waste 2.0'</td><td><a href="https://www.worldbank.org/en/topic/urbandevelopment/publication/what-a-waste-20-a-global-snapshot-of-solid-waste-management-to-2050" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Land Use</td><td>-0.002</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
+                    <tr><td>Material Processing</td><td>Climate Change</td><td>0.02</td><td>kg CO2e/kg</td><td>Industry data</td><td>N/A</td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.3</td><td>MJ/kg</td><td>Recycling industry data</td><td>N/A</td></tr>
+                    <tr><td></td><td>Water Depletion</td><td>0.5</td><td>L/kg</td><td>Plastics Recyclers Europe</td><td><a href="https://www.plasticsrecyclers.eu/" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>0.001</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
+                    <tr><td>Manufacturing</td><td>Climate Change</td><td>0.08</td><td>kg CO2e/kg</td><td>Gjenge Makers (Kenya) interviews</td><td><a href="https://www.gjenge.co.ke/" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>1.2</td><td>MJ/kg</td><td>Plastics processing industry data</td><td>N/A</td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>0.004</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
+                    <tr><td></td><td>Land Use</td><td>0.0005</td><td>m²a/kg</td><td>ReCiPe 2016</td><td><a href="https://www.rivm.nl/en/document/recipe-2016-v11-report" target="_blank">Link</a></td></tr>
+                    <tr><td>Transportation</td><td>Climate Change</td><td>0.015</td><td>kg CO2e/kg</td><td>Standard freight emission factors</td><td>N/A</td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.2</td><td>MJ/kg</td><td>Standard freight energy factors</td><td>N/A</td></tr>
+                    <tr><td></td><td>Particulate Matter</td><td>0.002</td><td>g PM2.5/kg</td><td>EMEP/EEA (2019)</td><td><a href="https://www.eea.europa.eu/publications/emep-eea-guidebook-2019" target="_blank">Link</a></td></tr>
+                    <tr><td>Packaging</td><td>Climate Change</td><td>0.001</td><td>kg CO2e/kg</td><td>Ecoinvent</td><td>N/A</td></tr>
+                    <tr><td></td><td>Energy Demand</td><td>0.02</td><td>MJ/kg</td><td>Ecoinvent</td><td>N/A</td></tr>
+                </tbody>
+            </table>
+            <p class="notes"><em>Note: "N/A" for links indicates that the data is from general industry knowledge, standard databases like Ecoinvent, or internal estimates and does not have a direct, single hyperlink.</em></p>
+        </div>
+
+        <div id="Results" class="tab-content">
+            <h2>LCA Results Summary</h2>
+            <p>The table below shows the total aggregated environmental impacts for each brick type across all life cycle stages ("Cradle-to-Gate" for PET, "Cradle-to-Grave" for Clay).</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Impact Category</th>
+                        <th>Clay Brick</th>
+                        <th>PET Brick</th>
+                        <th>Unit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Climate Change</td>
+                        <td>0.4980</td>
+                        <td>-2.3840</td>
+                        <td>kg CO2e/kg</td>
+                    </tr>
+                    <tr>
+                        <td>Energy Demand</td>
+                        <td>5.0750</td>
+                        <td>1.7700</td>
+                        <td>MJ/kg</td>
+                    </tr>
+                    <tr>
+                        <td>Water Depletion</td>
+                        <td>1.5300</td>
+                        <td>0.5000</td>
+                        <td>L/kg</td>
+                    </tr>
+                    <tr>
+                        <td>Particulate Matter</td>
+                        <td>0.8320</td>
+                        <td>-1.4930</td>
+                        <td>g PM2.5/kg</td>
+                    </tr>
+                    <tr>
+                        <td>Land Use</td>
+                        <td>0.0018</td>
+                        <td>-0.0015</td>
+                        <td>m²a/kg</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
 </body>
 </html>
