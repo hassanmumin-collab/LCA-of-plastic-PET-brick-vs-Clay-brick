@@ -1,0 +1,254 @@
+{
+  "functional_unit": {
+    "unit": "1 kg of finished brick",
+    "notes": "All data is normalized to 1 kg of the final product."
+  },
+  "clay_brick": {
+    "stages": {
+      "raw_material_acquisition": {
+        "climate_change": {
+          "value": 0.002,
+          "unit": "kg_co2e_per_kg",
+          "source": "Gweilo et al. (2011) adapted for Kenyan context",
+          "notes": "Emissions from diesel-powered excavation of clay."
+        },
+        "energy_demand": {
+          "value": 0.03,
+          "unit": "mj_per_kg",
+          "source": "Christoforou et al. (2016)",
+          "notes": "Energy for excavation machinery."
+        },
+        "water_depletion": {
+          "value": 0,
+          "unit": "liters_per_kg",
+          "source": "Assumption",
+          "notes": "Water use in clay extraction is considered negligible."
+        },
+        "particulate_matter": {
+            "value": 0.005,
+            "unit": "g_pm2.5_per_kg",
+            "source": "EMEP/EEA (2019)",
+            "notes": "Dust from excavation and transport."
+        },
+        "land_use": {
+            "value": 0.001,
+            "unit": "m2a_per_kg",
+            "source": "ReCiPe 2016",
+            "notes": "Land transformation for quarrying."
+        }
+      },
+      "material_processing": {
+        "climate_change": {
+          "value": 0.005,
+          "unit": "kg_co2e_per_kg",
+          "source": "Local industry data adaptation",
+          "notes": "Electricity for crushing, grinding, and screening."
+        },
+        "energy_demand": {
+          "value": 0.1,
+          "unit": "mj_per_kg",
+          "source": "Koroneos & Dompros (2007)",
+          "notes": "Grid electricity for machinery."
+        },
+        "water_depletion": {
+            "value": 0,
+            "unit": "liters_per_kg",
+            "source": "Assumption",
+            "notes": "Dry processing assumed."
+        },
+        "particulate_matter": {
+            "value": 0.01,
+            "unit": "g_pm2.5_per_kg",
+            "source": "EMEP/EEA (2019)",
+            "notes": "Dust from crushing and screening."
+        },
+        "land_use": {
+            "value": 0,
+            "unit": "m2a_per_kg",
+            "source": "Assumption",
+            "notes": "Processing occurs at the manufacturing plant site."
+        }
+      },
+      "manufacturing": {
+        "climate_change": {
+          "value": 0.35,
+          "unit": "kg_co2e_per_kg",
+          "source": "UNEP (2020) 'Eco-friendly and Sustainable Urbanisation in Kenya'",
+          "notes": "Primarily from biomass/coal combustion in clamp kilns. Includes shaping, drying, and firing."
+        },
+        "energy_demand": {
+          "value": 4.5,
+          "unit": "mj_per_kg",
+          "source": "Local Kenyan brick sector studies",
+          "notes": "Thermal energy for firing is the dominant factor."
+        },
+        "water_depletion": {
+          "value": 1.5,
+          "unit": "liters_per_kg",
+          "source": "Paper 'Fired-Clay Bricks Incorporating Biosolids'",
+          "notes": "Water for mixing to achieve plasticity before shaping."
+        },
+        "particulate_matter": {
+            "value": 0.8,
+            "unit": "g_pm2.5_per_kg",
+            "source": "WHO / Local air quality studies",
+            "notes": "Major emissions from inefficient kiln firing."
+        },
+        "land_use": {
+            "value": 0.0005,
+            "unit": "m2a_per_kg",
+            "source": "ReCiPe 2016",
+            "notes": "Land for the manufacturing plant."
+        }
+      },
+      "transportation": {
+        "climate_change": {
+          "value": 0.015,
+          "unit": "kg_co2e_per_kg",
+          "source": "Standard freight emission factors",
+          "notes": "Assumes 50 km transport distance by a medium-duty truck."
+        },
+        "energy_demand": {
+          "value": 0.2,
+          "unit": "mj_per_kg",
+          "source": "Standard freight energy factors",
+          "notes": "Diesel consumption for transport."
+        },
+        "water_depletion": { "value": 0, "unit": "liters_per_kg", "source": "Assumption", "notes": "N/A" },
+        "particulate_matter": { "value": 0.002, "unit": "g_pm2.5_per_kg", "source": "EMEP/EEA (2019)", "notes": "Diesel exhaust." },
+        "land_use": { "value": 0, "unit": "m2a_per_kg", "source": "Assumption", "notes": "N/A" }
+      },
+      "packaging": {
+        "climate_change": { "value": 0.001, "unit": "kg_co2e_per_kg", "source": "Ecoinvent", "notes": "Minimal plastic strapping." },
+        "energy_demand": { "value": 0.02, "unit": "mj_per_kg", "source": "Ecoinvent", "notes": "Energy for packaging production." },
+        "water_depletion": { "value": 0, "unit": "liters_per_kg", "source": "Assumption", "notes": "N/A" },
+        "particulate_matter": { "value": 0, "unit": "g_pm2.5_per_kg", "source": "Assumption", "notes": "Negligible." },
+        "land_use": { "value": 0, "unit": "m2a_per_kg", "source": "Assumption", "notes": "N/A" }
+      }
+    }
+  },
+  "pet_brick": {
+    "stages": {
+      "raw_material_acquisition": {
+        "climate_change": {
+          "value": -2.5,
+          "unit": "kg_co2e_per_kg",
+          "source": "UNEP (2021) 'Waste-to-Energy'",
+          "notes": "Avoided burden credit from diverting 1kg of PET from open burning."
+        },
+        "energy_demand": {
+          "value": 0.05,
+          "unit": "mj_per_kg",
+          "source": "Internal estimate",
+          "notes": "Energy for manual collection and transport of waste plastic."
+        },
+        "water_depletion": {
+          "value": 0,
+          "unit": "liters_per_kg",
+          "source": "Assumption",
+          "notes": "Water use in collection is negligible."
+        },
+        "particulate_matter": {
+            "value": -1.5,
+            "unit": "g_pm2.5_per_kg",
+            "source": "World Bank (2018) 'What a Waste 2.0'",
+            "notes": "Avoided PM2.5 emissions from open burning of plastic."
+        },
+        "land_use": {
+            "value": -0.002,
+            "unit": "m2a_per_kg",
+            "source": "ReCiPe 2016",
+            "notes": "Avoided land use for landfilling."
+        }
+      },
+      "material_processing": {
+        "climate_change": {
+          "value": 0.02,
+          "unit": "kg_co2e_per_kg",
+          "source": "Industry data",
+          "notes": "Electricity for sorting, washing, and shredding PET."
+        },
+        "energy_demand": {
+          "value": 0.3,
+          "unit": "mj_per_kg",
+          "source": "Recycling industry data",
+          "notes": "Grid electricity for machinery."
+        },
+        "water_depletion": {
+            "value": 0.5,
+            "unit": "liters_per_kg",
+            "source": "Plastics Recyclers Europe",
+            "notes": "Water for washing shredded plastic flakes."
+        },
+        "particulate_matter": {
+            "value": 0.001,
+            "unit": "g_pm2.5_per_kg",
+            "source": "EMEP/EEA (2019)",
+            "notes": "Minor emissions from electricity generation."
+        },
+        "land_use": {
+            "value": 0,
+            "unit": "m2a_per_kg",
+            "source": "Assumption",
+            "notes": "Processing occurs at the manufacturing plant site."
+        }
+      },
+      "manufacturing": {
+        "climate_change": {
+          "value": 0.08,
+          "unit": "kg_co2e_per_kg",
+          "source": "Gjenge Makers (Kenya) interviews",
+          "notes": "Electricity for extruder/compression molding machine."
+        },
+        "energy_demand": {
+          "value": 1.2,
+          "unit": "mj_per_kg",
+          "source": "Plastics processing industry data",
+          "notes": "Electrical energy for heating and molding. No firing."
+        },
+        "water_depletion": {
+          "value": 0,
+          "unit": "liters_per_kg",
+          "source": "Assumption",
+          "notes": "No water used in the molding process."
+        },
+        "particulate_matter": {
+            "value": 0.004,
+            "unit": "g_pm2.5_per_kg",
+            "source": "EMEP/EEA (2019)",
+            "notes": "Emissions from electricity generation."
+        },
+        "land_use": {
+            "value": 0.0005,
+            "unit": "m2a_per_kg",
+            "source": "ReCiPe 2016",
+            "notes": "Land for the manufacturing plant."
+        }
+      },
+      "transportation": {
+        "climate_change": {
+          "value": 0.015,
+          "unit": "kg_co2e_per_kg",
+          "source": "Standard freight emission factors",
+          "notes": "Assumes 50 km transport distance by a medium-duty truck."
+        },
+        "energy_demand": {
+          "value": 0.2,
+          "unit": "mj_per_kg",
+          "source": "Standard freight energy factors",
+          "notes": "Diesel consumption for transport."
+        },
+        "water_depletion": { "value": 0, "unit": "liters_per_kg", "source": "Assumption", "notes": "N/A" },
+        "particulate_matter": { "value": 0.002, "unit": "g_pm2.5_per_kg", "source": "EMEP/EEA (2019)", "notes": "Diesel exhaust." },
+        "land_use": { "value": 0, "unit": "m2a_per_kg", "source": "Assumption", "notes": "N/A" }
+      },
+      "packaging": {
+        "climate_change": { "value": 0.001, "unit": "kg_co2e_per_kg", "source": "Ecoinvent", "notes": "Minimal plastic strapping." },
+        "energy_demand": { "value": 0.02, "unit": "mj_per_kg", "source": "Ecoinvent", "notes": "Energy for packaging production." },
+        "water_depletion": { "value": 0, "unit": "liters_per_kg", "source": "Assumption", "notes": "N/A" },
+        "particulate_matter": { "value": 0, "unit": "g_pm2.5_per_kg", "source": "Assumption", "notes": "Negligible." },
+        "land_use": { "value": 0, "unit": "m2a_per_kg", "source": "Assumption", "notes": "N/A" }
+      }
+    }
+  }
+}
