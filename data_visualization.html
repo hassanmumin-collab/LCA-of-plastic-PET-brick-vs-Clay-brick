@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LCA Data Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -88,19 +90,104 @@
             margin-top: -20px;
             padding-bottom: 20px;
         }
+        .summary-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #fff;
+            border-left: 5px solid #005a9e;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .summary-section h3 {
+            margin-top: 0;
+            color: #005a9e;
+        }
+        .recommendation {
+            background-color: #e2eef7;
+            border-left-color: #27ae60;
+        }
+        .mermaid-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Life Cycle Assessment (LCA) Data and Results</h1>
-        <p>This document presents the Life Cycle Inventory (LCI) data and the final calculated results for the comparison between traditional Clay Bricks and innovative PET Plastic Bricks.</p>
+        <h1>Life Cycle Assessment (LCA): Clay Brick vs. PET Plastic Brick</h1>
+        <p>This report presents a comparative Life Cycle Assessment of traditional clay bricks against innovative PET plastic bricks, with a functional unit of 1 kg of finished product.</p>
 
         <div class="tabs">
-            <button class="tab-button active" onclick="openTab(event, 'DataInventory')">Data Inventory</button>
-            <button class="tab-button" onclick="openTab(event, 'Results')">Calculation Results</button>
+            <button class="tab-button active" onclick="openTab(event, 'ExecutiveSummary')">Executive Summary</button>
+            <button class="tab-button" onclick="openTab(event, 'DataInventory')">Data Inventory</button>
+            <button class="tab-button" onclick="openTab(event, 'Results')">Results Summary</button>
+            <button class="tab-button" onclick="openTab(event, 'Breakdown')">Impact Comparison</button>
         </div>
 
-        <div id="DataInventory" class="tab-content" style="display: block;">
+        <div id="ExecutiveSummary" class="tab-content" style="display: block;">
+            <h2>Executive Summary & Strategic Recommendation</h2>
+            
+            <div class="summary-section">
+                <h3>Overview</h3>
+                <p>This analysis reveals a stark contrast in the environmental performance of PET bricks versus traditional clay bricks. The PET brick demonstrates significant environmental benefits, primarily driven by the "avoided burden" of plastic waste recycling. In contrast, the high-energy firing process for clay bricks results in substantial environmental impacts, particularly in energy consumption and climate change contributions.</p>
+            </div>
+
+            <div class="summary-section">
+                <h3>System Boundaries</h3>
+                <p>The diagram below illustrates the scope of the analysis for each product system. The "Cradle-to-Use" boundary for the clay brick covers its entire lifecycle from raw material extraction to installation. The "Cradle-to-Gate" boundary for the PET brick begins with waste collection and crucially includes the "Avoided Process" of landfilling, which is the source of its environmental credits.</p>
+                <div class="mermaid-container">
+                    <pre class="mermaid">
+graph TD
+    subgraph Clay["🧱 Clay Brick: Cradle-to-Use"]
+        A["Raw Material<br/>Acquisition"] --> B["Material<br/>Processing"] --> C["Manufacturing"] --> D["Transportation"] --> E["Packaging"] --> F["Mortar<br/>(Cement)"]
+    end
+
+    subgraph PET["♻️ PET Brick: Cradle-to-Gate with Avoided Burden"]
+        G["Waste Plastic<br/>Collection"] --> H["Material<br/>Processing"] --> I["Manufacturing"] --> J["Transportation"] --> K["Packaging"]
+    end
+    
+    subgraph Avoided["Avoided Process"]
+        L["Landfilling of<br/>Waste Plastic"]
+    end
+    
+    G -.- L
+    
+    style Clay fill:#e8f4f8,stroke:#0078d4,stroke-width:3px
+    style PET fill:#e8f5e9,stroke:#27ae60,stroke-width:3px
+    style Avoided fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+    style A fill:#b3dff0,stroke:#0078d4,stroke-width:2px
+    style B fill:#b3dff0,stroke:#0078d4,stroke-width:2px
+    style C fill:#b3dff0,stroke:#0078d4,stroke-width:2px
+    style D fill:#b3dff0,stroke:#0078d4,stroke-width:2px
+    style E fill:#b3dff0,stroke:#0078d4,stroke-width:2px
+    style F fill:#b3dff0,stroke:#0078d4,stroke-width:2px
+    style G fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style H fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style I fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style J fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style K fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style L fill:#ffe0b2,stroke:#ff9800,stroke-width:2px
+                    </pre>
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3>Key Findings</h3>
+                <ul>
+                    <li><strong>Climate Change:</strong> The PET brick offers a profound net benefit, sequestering <strong>-2.38 kg CO2e</strong> per kg of brick. This is a direct result of diverting plastic waste from landfills, which would otherwise release potent greenhouse gases. The clay brick, conversely, emits <strong>0.50 kg CO2e</strong> per kg.</li>
+                    <li><strong>Energy Demand:</strong> The PET brick is significantly more energy-efficient, requiring only <strong>1.77 MJ</strong> of energy per kg, compared to <strong>5.08 MJ</strong> for the clay brick—a 65% reduction.</li>
+                    <li><strong>Particulate Matter:</strong> Similar to its climate impact, the PET brick provides a net reduction in particulate matter (<strong>-1.49 g PM2.5</strong>), avoiding pollution associated with waste decomposition. The clay brick is a net emitter (<strong>0.83 g PM2.5</strong>).</li>
+                    <li><strong>Water & Land Use:</strong> The PET brick also outperforms in water depletion (67% lower) and land use (offering a net benefit vs. a net impact for clay).</li>
+                </ul>
+            </div>
+
+            <div class="summary-section recommendation">
+                <h3>Strategic Recommendation</h3>
+                <p><strong>It is our strong recommendation to prioritize the adoption and scaling of PET brick production.</strong></p>
+                <p>The PET brick not only serves as a viable building material but also functions as a powerful tool for waste management and pollution mitigation. Its "avoided burden" benefits in critical impact categories like climate change and particulate matter present a compelling case for its use, particularly in regions grappling with plastic waste challenges. Investment in this technology aligns with circular economy principles and offers a clear path toward more sustainable construction practices.</p>
+            </div>
+        </div>
+
+        <div id="DataInventory" class="tab-content">
             <h2>Clay Brick Data</h2>
             <table>
                 <thead>
@@ -237,6 +324,15 @@
             </div>
         </div>
 
+        <div id="Breakdown" class="tab-content">
+            <h2>Normalized Impact Comparison: PET Brick vs. Clay Brick (Baseline)</h2>
+            <p>This chart shows the relative performance of the PET Brick compared to the Clay Brick, which is set as the 100% baseline. Bars to the left indicate an environmental improvement (a lower impact), while bars to the right would indicate a higher impact. This method allows for a standardized comparison across different impact categories and units.</p>
+            
+            <div class="chart-container">
+                <canvas id="normalizedComparisonChart"></canvas>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -252,7 +348,107 @@
             }
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
+
+            if (tabName === 'Breakdown') {
+                renderNormalizedChart();
+            }
         }
+
+        let normalizedChartRendered = false;
+        function renderNormalizedChart() {
+            if (normalizedChartRendered) {
+                return;
+            }
+            normalizedChartRendered = true;
+
+            const clayImpacts = {
+                'Climate Change': 0.4980,
+                'Energy Demand': 5.0750,
+                'Water Depletion': 1.5300,
+                'Particulate Matter': 0.8320,
+                'Land Use': 0.0018
+            };
+
+            const petImpacts = {
+                'Climate Change': -2.3840,
+                'Energy Demand': 1.7700,
+                'Water Depletion': 0.5000,
+                'Particulate Matter': -1.4930,
+                'Land Use': -0.0015
+            };
+
+            const labels = Object.keys(clayImpacts);
+            const percentageData = labels.map(label => {
+                const clayValue = clayImpacts[label];
+                const petValue = petImpacts[label];
+                // Handle cases where clayValue is 0 to avoid division by zero
+                if (clayValue === 0) return 0;
+                // Calculate percentage difference relative to clay brick's impact
+                return ((petValue - clayValue) / Math.abs(clayValue)) * 100;
+            });
+
+            const ctx = document.getElementById('normalizedComparisonChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '% Improvement / Decline vs. Clay Brick',
+                        data: percentageData,
+                        backgroundColor: percentageData.map(v => v < 0 ? '#27ae60' : '#c0392b'),
+                        borderColor: percentageData.map(v => v < 0 ? '#27ae60' : '#c0392b'),
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            position: 'top',
+                            title: {
+                                display: true,
+                                text: 'Performance vs. Clay Brick Baseline (%)',
+                                font: { size: 14, family: "'Segoe UI', sans-serif" }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Hide legend as colors are self-explanatory
+                        },
+                        title: {
+                            display: true,
+                            text: 'PET Brick Performance Relative to Clay Brick',
+                            font: { size: 18, family: "'Segoe UI', sans-serif", weight: 'bold' },
+                            color: '#333'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let value = context.parsed.x;
+                                    let message = value > 0 ? 'Worse' : 'Better';
+                                    return `${Math.abs(value).toFixed(0)}% ${message} than Clay Brick`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize Mermaid.js
+        mermaid.initialize({ startOnLoad: true });
     </script>
 
 </body>
