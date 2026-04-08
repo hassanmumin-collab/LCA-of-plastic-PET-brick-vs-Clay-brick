@@ -176,11 +176,12 @@
 
         <div id="Results" class="tab-content">
             <h2>LCA Results Summary</h2>
-            <p>The table below shows the total aggregated environmental impacts for each brick type across all life cycle stages ("Cradle-to-Gate" for PET, "Cradle-to-Grave" for Clay).</p>
+            <p>The table below shows the total aggregated environmental impacts for each brick type across all life cycle stages. The values represent the sum of impacts from raw material acquisition through the final use phase where applicable.</p>
             <table>
                 <thead>
                     <tr>
                         <th>Impact Category</th>
+                        <th>Description</th>
                         <th>Clay Brick</th>
                         <th>PET Brick</th>
                         <th>Unit</th>
@@ -189,36 +190,51 @@
                 <tbody>
                     <tr>
                         <td>Climate Change</td>
+                        <td>Measures the global warming potential, primarily from greenhouse gas emissions like CO2.</td>
                         <td>0.4980</td>
                         <td>-2.3840</td>
                         <td>kg CO2e/kg</td>
                     </tr>
                     <tr>
                         <td>Energy Demand</td>
+                        <td>Represents the total non-renewable energy consumed throughout the lifecycle.</td>
                         <td>5.0750</td>
                         <td>1.7700</td>
                         <td>MJ/kg</td>
                     </tr>
                     <tr>
                         <td>Water Depletion</td>
+                        <td>Indicates the total volume of fresh water consumed.</td>
                         <td>1.5300</td>
                         <td>0.5000</td>
                         <td>L/kg</td>
                     </tr>
                     <tr>
                         <td>Particulate Matter</td>
+                        <td>Measures the emission of fine particles that can harm human health and the environment.</td>
                         <td>0.8320</td>
                         <td>-1.4930</td>
                         <td>g PM2.5/kg</td>
                     </tr>
                     <tr>
                         <td>Land Use</td>
+                        <td>Represents the area of land occupied or transformed over time.</td>
                         <td>0.0018</td>
                         <td>-0.0015</td>
                         <td>m²a/kg</td>
                     </tr>
                 </tbody>
             </table>
+
+            <h3>Calculation Notes</h3>
+            <div class="notes" style="margin-top: 0;">
+                <p><strong>Negative Impact Values (Avoided Burden):</strong> The significant negative values for the PET brick's Climate Change, Particulate Matter, and Land Use impacts are due to the "avoided burden" principle. By recycling PET plastic waste that would otherwise end up in a landfill or uncontrolled dump, the brick is credited with avoiding the environmental impacts that waste would have caused. For example:</p>
+                <ul>
+                    <li><strong>Climate Change:</strong> The credit for avoiding potent greenhouse gas emissions (like methane from landfill decomposition) outweighs the emissions from the brick's own manufacturing and transportation.</li>
+                    <li><strong>Particulate Matter & Land Use:</strong> Similarly, the brick is credited for preventing pollution and land use associated with waste disposal sites.</li>
+                </ul>
+                <p><strong>Calculation Method:</strong> The total impact for each category is the sum of all values from each life cycle stage detailed in the "Data Inventory" tab. This provides a comprehensive "Cradle-to-Gate" (for PET) and "Cradle-to-Use" (for Clay) assessment.</p>
+            </div>
         </div>
 
     </div>
