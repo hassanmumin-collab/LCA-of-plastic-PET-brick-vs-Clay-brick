@@ -40,13 +40,16 @@ class Brick:
     total_impacts_by_stage: Dict[str, Dict[str, float]] = field(default_factory=dict)
 
     def get_total_impact(self) -> Dict[str, Dict[str, float or str]]:
-        """Calculates the total impact for each category."""
+        """Calculates the total impact for each category across all stages."""
         totals: Dict[str, Dict[str, float or str]] = {}
         for stage in self.stages:
             for impact in stage.impacts:
-                if impact.category not in totals:
-                    totals[impact.category] = {}
-                totals[impact.category]["value"] += impact.value
+                if impact.name not in totals:
+                    totals[impact.name] = {
+                        "value": 0.0,
+                        "unit": impact.unit
+                    }
+                totals[impact.name]["value"] += impact.value
         return totals
 
     def get_impact_breakdown(self) -> Dict[str, Dict[str, float]]:
@@ -54,15 +57,16 @@ class Brick:
         breakdown: Dict[str, Dict[str, float]] = {}
         for stage in self.stages:
             for impact in stage.impacts:
-                if impact.category not in breakdown:
-                    breakdown[impact.category] = {}
-                breakdown[impact.category][stage.name] = impact.value
+                if impact.name not in breakdown:
+                    breakdown[impact.name] = {}
+                breakdown[impact.name][stage.name] = impact.value
         return breakdown
 
 
 class LcaCalculator:
     """
     A tool to load, process, and calculate Life Cycle Assessment data for different products.
+    Converts per-kg values to per-brick values using brick weights.
     """
 
     def __init__(self, data_path: Path):
@@ -71,10 +75,12 @@ class LcaCalculator:
         """
         self.data_path = data_path
         self.raw_data: Dict = {}
+        self.brick_weights: Dict[str, float] = {}
         self.bricks: List[Brick] = []
         self.results: Dict = {}
         
         self.load_data()
+        self.extract_brick_weights()
         self.process_data()
         self.results = self.get_results()
 
@@ -90,28 +96,63 @@ class LcaCalculator:
             print(f"Error: Could not decode JSON from {self.data_path}")
             raise
 
+    def extract_brick_weights(self):
+        """Extracts brick weights from the functional_unit section."""
+        try:
+            functional_unit = self.raw_data.get("functional_unit", {})
+            brick_weights = functional_unit.get("brick_weights", {})
+            
+            # Map brick type data names to brick type names
+            if "clay_brick" in brick_weights:
+                self.brick_weights["clay_brick"] = brick_weights["clay_brick"]["weight_kg"]
+            if "pet_brick" in brick_weights:
+                self.brick_weights["pet_brick"] = brick_weights["pet_brick"]["weight_kg"]
+                
+            if not self.brick_weights:
+                raise ValueError("No brick weights found in data file")
+        except Exception as e:
+            print(f"Error extracting brick weights: {e}")
+            raise
+
     def process_data(self):
-        """Processes the loaded raw data into structured Brick objects."""
+        """Processes the loaded raw data into structured Brick objects with per-brick calculations."""
         if not self.raw_data:
             raise ValueError("Data not loaded. Please run load_data() first.")
 
         self.bricks = []
-        for brick_name, brick_data in self.raw_data.items():
+        
+        # Process clay brick and pet brick from the data
+        for brick_type in ["clay_brick", "pet_brick"]:
+            if brick_type not in self.raw_data:
+                continue
+                
+            brick_data = self.raw_data[brick_type]
+            brick_weight = self.brick_weights.get(brick_type, 1.0)
+            
+            # Convert brick type name for display (clay_brick -> Clay Brick)
+            display_name = " ".join(word.capitalize() for word in brick_type.split("_"))
+            
             brick_stages = []
             for stage_name, stage_data in brick_data["stages"].items():
                 stage_impacts = []
-                for impact_category, impact_details in stage_data["impacts"].items():
+                for impact_category, impact_details in stage_data.items():
+                    # Multiply per-kg value by brick weight to get per-brick value
+                    per_kg_value = impact_details["value"]
+                    per_brick_value = per_kg_value * brick_weight
+                    
                     impact = Impact(
-                        category=impact_category,
-                        value=impact_details["value"],
-                        unit=impact_details["unit"]
+                        name=impact_category,
+                        value=per_brick_value,
+                        unit=impact_details["unit"],
+                        source=impact_details.get("source", "N/A"),
+                        notes=impact_details.get("notes", "")
                     )
                     stage_impacts.append(impact)
                 
                 stage = LifeCycleStage(name=stage_name, impacts=stage_impacts)
                 brick_stages.append(stage)
             
-            brick = Brick(name=brick_name, stages=brick_stages)
+            brick = Brick(name=display_name, stages=brick_stages)
             self.bricks.append(brick)
 
     def get_results(self) -> Dict[str, Dict[str, Dict[str, float or str]]]:
@@ -123,38 +164,47 @@ class LcaCalculator:
         for brick in self.bricks:
             all_results[brick.name] = {
                 "total_impacts": brick.get_total_impact(),
-                "impact_breakdown": brick.get_impact_breakdown()
+                "impact_breakdown": brick.get_impact_breakdown(),
+                "brick_weight": self.brick_weights.get(brick.name.lower().replace(" ", "_"), 1.0)
             }
         return all_results
 
     def print_summary(self):
-        """Prints a summary of the total impacts for each brick."""
+        """Prints a summary of the total impacts for each brick (per-brick values)."""
         if not self.bricks:
             raise ValueError("Data not processed. Please run process_data() first.")
 
-        print("\n--- LCA Results Summary ---")
-        for name, result_data in self.results.items():
-            print(f"\nResults for: {name}")
-            for category, data in result_data["total_impacts"].items():
+        print("\n--- LCA Results Summary (Per Brick) ---")
+        for brick in self.bricks:
+            print(f"\nResults for: {brick.name}")
+            total_impacts = brick.get_total_impact()
+            for category, data in total_impacts.items():
                 # Round the value to 4 decimal places for cleaner output
                 rounded_value = round(data['value'], 4)
-                print(f"  - Total {category}: {rounded_value} {data['unit']}")
+                unit = data['unit']
+                print(f"  - Total {category}: {rounded_value} {unit}")
         print("\n--------------------------")
 
     def print_impact_breakdown(self):
-        """Prints a detailed breakdown of impacts by life cycle stage."""
-        if not self.results:
+        """Prints a detailed breakdown of impacts by life cycle stage (per-brick values)."""
+        if not self.bricks:
             raise ValueError("Results not calculated. Call get_results() first.")
 
-        print("\n--- Detailed Impact Breakdown ---")
-        for name, result_data in self.results.items():
-            print(f"\n--- {name} ---")
-            for category, stages in result_data["impact_breakdown"].items():
-                print(f"\nImpact Category: {category}")
-                # Find the unit for the current category
-                unit = result_data["total_impacts"][category]['unit']
+        print("\n--- Detailed Impact Breakdown (Per Brick) ---")
+        for brick in self.bricks:
+            print(f"\n--- {brick.name} ---")
+            total_impacts = brick.get_total_impact()
+            impact_breakdown = brick.get_impact_breakdown()
+            
+            for category, stages in impact_breakdown.items():
+                unit = total_impacts[category]['unit']
+                print(f"\n{category.replace('_', ' ').title()}: ({unit})")
+                total = 0
                 for stage, value in stages.items():
-                    print(f"  - {stage}: {value} {unit}")
+                    rounded_value = round(value, 4)
+                    print(f"  - {stage}: {rounded_value}")
+                    total += value
+                print(f"  - TOTAL: {round(total, 4)}")
         print("\n---------------------------------")
 
 
