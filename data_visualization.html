@@ -204,18 +204,23 @@
                     <pre class="mermaid">
 graph LR
     subgraph Clay["🧱 CLAY BRICK: Cradle-to-Use"]
+        direction LR
         A["Raw<br/>Material"] --> B["Material<br/>Process"] --> C["Manufacturing<br/>Firing"] --> D["Transport"] --> E["Packaging"] --> F["Mortar<br/>Use"]
     end
 
     subgraph PET["♻️ PET BRICK: Cradle-to-Gate + Avoided Burden"]
+        direction LR
         G["Waste<br/>Collect"] --> H["Material<br/>Process"] --> I["Manufacturing<br/>Mold"] --> J["Transport"] --> K["Packaging"]
     end
     
     subgraph Avoided["⚠️ AVOIDED PROCESS"]
+        direction LR
         L["Landfill +<br/>Methane"]
     end
     
     G -.avoids.-> L
+    
+    Clay --> PET
     
     style Clay fill:#e8f4f8,stroke:#003262,stroke-width:3px,color:#000
     style PET fill:#e8f5e9,stroke:#27ae60,stroke-width:3px,color:#000
