@@ -202,30 +202,30 @@
                 <p>The diagram below illustrates the scope of the analysis for each product system. The "Cradle-to-Use" boundary for the clay brick covers its entire lifecycle from raw material extraction to installation. The "Cradle-to-Gate" boundary for the PET brick begins with waste collection and crucially includes the "Avoided Process" of landfilling, which is the source of its environmental credits.</p>
                 <div class="mermaid-container">
                     <pre class="mermaid">
-graph TD
-    subgraph Clay["🧱 Clay Brick: Cradle-to-Use"]
-        A["Raw Material<br/>Acquisition"] --> B["Material<br/>Processing"] --> C["Manufacturing"] --> D["Transportation"] --> E["Packaging"] --> F["Mortar<br/>(Cement)"]
+graph LR
+    subgraph Clay["🧱 CLAY BRICK: Cradle-to-Use"]
+        A["Raw<br/>Material"] --> B["Material<br/>Process"] --> C["Manufacturing<br/>Firing"] --> D["Transport"] --> E["Packaging"] --> F["Mortar<br/>Use"]
     end
 
-    subgraph PET["♻️ PET Brick: Cradle-to-Gate with Avoided Burden"]
-        G["Waste Plastic<br/>Collection"] --> H["Material<br/>Processing"] --> I["Manufacturing"] --> J["Transportation"] --> K["Packaging"]
+    subgraph PET["♻️ PET BRICK: Cradle-to-Gate + Avoided Burden"]
+        G["Waste<br/>Collect"] --> H["Material<br/>Process"] --> I["Manufacturing<br/>Mold"] --> J["Transport"] --> K["Packaging"]
     end
     
-    subgraph Avoided["Avoided Process"]
-        L["Landfilling of<br/>Waste Plastic"]
+    subgraph Avoided["⚠️ AVOIDED PROCESS"]
+        L["Landfill +<br/>Methane"]
     end
     
-    G -.- L
+    G -.avoids.-> L
     
-    style Clay fill:#e8f4f8,stroke:#0078d4,stroke-width:3px
-    style PET fill:#e8f5e9,stroke:#27ae60,stroke-width:3px
-    style Avoided fill:#fff3e0,stroke:#ff9800,stroke-width:3px
-    style A fill:#b3dff0,stroke:#0078d4,stroke-width:2px
-    style B fill:#b3dff0,stroke:#0078d4,stroke-width:2px
-    style C fill:#b3dff0,stroke:#0078d4,stroke-width:2px
-    style D fill:#b3dff0,stroke:#0078d4,stroke-width:2px
-    style E fill:#b3dff0,stroke:#0078d4,stroke-width:2px
-    style F fill:#b3dff0,stroke:#0078d4,stroke-width:2px
+    style Clay fill:#e8f4f8,stroke:#003262,stroke-width:3px,color:#000
+    style PET fill:#e8f5e9,stroke:#27ae60,stroke-width:3px,color:#000
+    style Avoided fill:#fff3e0,stroke:#ff9800,stroke-width:3px,color:#000
+    style A fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style B fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style C fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style D fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style E fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style F fill:#b3dff0,stroke:#003262,stroke-width:2px
     style G fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
     style H fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
     style I fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
