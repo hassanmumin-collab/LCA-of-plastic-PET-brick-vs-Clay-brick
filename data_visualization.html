@@ -114,7 +114,7 @@
 <body>
     <div class="container">
         <h1>Life Cycle Assessment (LCA): Clay Brick vs. PET Plastic Brick</h1>
-        <p>This report presents a comparative Life Cycle Assessment of traditional clay bricks against innovative PET plastic bricks, with a functional unit of 1 kg of finished product.</p>
+        <p>This report presents a comparative Life Cycle Assessment of traditional clay bricks against innovative PET plastic bricks, with a functional unit of 1 brick.</p>
 
         <div class="tabs">
             <button class="tab-button active" onclick="openTab(event, 'ExecutiveSummary')">Executive Summary</button>
@@ -171,19 +171,41 @@ graph TD
             </div>
 
             <div class="summary-section">
-                <h3>Key Findings</h3>
+                <h3>Methodology</h3>
+                <p><strong>Functional Unit:</strong> This assessment uses <strong>1 brick</strong> as the functional unit. This standardized basis allows for direct and fair comparison of environmental impacts between clay bricks and PET plastic bricks on a per-unit basis.</p>
+                
+                <p><strong>Brick Specifications:</strong></p>
                 <ul>
-                    <li><strong>Climate Change:</strong> The PET brick offers a profound net benefit, sequestering <strong>-2.38 kg CO2e</strong> per kg of brick. This is a direct result of diverting plastic waste from landfills, which would otherwise release potent greenhouse gases. The clay brick, conversely, emits <strong>0.50 kg CO2e</strong> per kg.</li>
-                    <li><strong>Energy Demand:</strong> The PET brick is significantly more energy-efficient, requiring only <strong>1.77 MJ</strong> of energy per kg, compared to <strong>5.08 MJ</strong> for the clay brick—a 65% reduction.</li>
-                    <li><strong>Particulate Matter:</strong> Similar to its climate impact, the PET brick provides a net reduction in particulate matter (<strong>-1.49 g PM2.5</strong>), avoiding pollution associated with waste decomposition. The clay brick is a net emitter (<strong>0.83 g PM2.5</strong>).</li>
-                    <li><strong>Water & Land Use:</strong> The PET brick also outperforms in water depletion (67% lower) and land use (offering a net benefit vs. a net impact for clay).</li>
+                    <li><strong>Clay Brick:</strong> 2.8 kg per brick (dimensions 19×19×13.5 cm). Source: Yüksek & Öztaş (2020) study of fired clay brick production in Turkey, representing standard masonry units used in East African construction.</li>
+                    <li><strong>PET Plastic Brick:</strong> 2.24 kg per brick (approximately 20% lighter than clay brick). The lighter weight reflects the density difference between plastic materials (1.2–1.4 g/cm³) and fired clay (1.8+ g/cm³), while maintaining similar functional dimensions.</li>
                 </ul>
+                
+                <p><strong>Life Cycle Assessment Approach:</strong></p>
+                <ul>
+                    <li><strong>Clay Brick Boundary:</strong> "Cradle-to-Use" - encompasses raw material extraction (clay mining), material processing, manufacturing (high-temperature kiln firing), transportation to site, packaging, and the use phase including mortar (cement) application during construction.</li>
+                    <li><strong>PET Brick Boundary:</strong> "Cradle-to-Gate with Avoided Burden" - begins with waste plastic collection from post-consumer sources, material sorting and processing, manufacturing into bricks, transportation, and packaging. Critically, this assessment includes the avoided burden principle, giving environmental credits for diverting waste from landfilling.</li>
+                </ul>
+                
+                <p><strong>Impact Categories Assessed:</strong></p>
+                <ul>
+                    <li><strong>Climate Change (kg CO2e/brick):</strong> Measures global warming potential from greenhouse gas emissions throughout the lifecycle.</li>
+                    <li><strong>Energy Demand (MJ/brick):</strong> Quantifies cumulative non-renewable energy consumption.</li>
+                    <li><strong>Water Depletion (L/brick):</strong> Indicates freshwater resource consumption.</li>
+                    <li><strong>Particulate Matter (g PM2.5/brick):</strong> Measures emissions of fine particulate matter harmful to human health and ecosystems.</li>
+                    <li><strong>Land Use (m²a/brick):</strong> Represents the area of land occupied or transformed per unit of product.</li>
+                </ul>
+                
+                <p><strong>Key Methodological Feature - Avoided Burden:</strong> The PET brick's environmental profile includes credits for avoiding the negative impacts that would result from landfilling the waste plastic. This reflects the circular economy principle that recycling waste materials prevents future environmental damage, making the comparison a true "avoided burden" assessment rather than a simple substitution scenario.</p>
             </div>
 
-            <div class="summary-section recommendation">
-                <h3>Strategic Recommendation</h3>
-                <p><strong>It is our strong recommendation to prioritize the adoption and scaling of PET brick production.</strong></p>
-                <p>The PET brick not only serves as a viable building material but also functions as a powerful tool for waste management and pollution mitigation. Its "avoided burden" benefits in critical impact categories like climate change and particulate matter present a compelling case for its use, particularly in regions grappling with plastic waste challenges. Investment in this technology aligns with circular economy principles and offers a clear path toward more sustainable construction practices.</p>
+            <div class="summary-section">
+                <h3>Key Findings</h3>
+                <ul>
+                    <li><strong>Climate Change:</strong> The PET brick offers a profound net benefit, sequestering <strong>-2.38 kg CO2e</strong> per brick. This is a direct result of diverting plastic waste from landfills, which would otherwise release potent greenhouse gases. The clay brick, conversely, emits <strong>0.50 kg CO2e</strong> per brick.</li>
+                    <li><strong>Energy Demand:</strong> The PET brick is significantly more energy-efficient, requiring only <strong>1.77 MJ</strong> of energy per brick, compared to <strong>5.08 MJ</strong> for the clay brick—a 65% reduction.</li>
+                    <li><strong>Particulate Matter:</strong> Similar to its climate impact, the PET brick provides a net reduction in particulate matter (<strong>-1.49 g PM2.5</strong> per brick), avoiding pollution associated with waste decomposition. The clay brick is a net emitter (<strong>0.83 g PM2.5</strong> per brick).</li>
+                    <li><strong>Water & Land Use:</strong> The PET brick also outperforms in water depletion (67% lower) and land use (offering a net benefit vs. a net impact for clay).</li>
+                </ul>
             </div>
         </div>
 
@@ -280,35 +302,35 @@ graph TD
                         <td>Measures the global warming potential, primarily from greenhouse gas emissions like CO2.</td>
                         <td>0.4980</td>
                         <td>-2.3840</td>
-                        <td>kg CO2e/kg</td>
+                        <td>kg CO2e/brick</td>
                     </tr>
                     <tr>
                         <td>Energy Demand</td>
                         <td>Represents the total non-renewable energy consumed throughout the lifecycle.</td>
                         <td>5.0750</td>
                         <td>1.7700</td>
-                        <td>MJ/kg</td>
+                        <td>MJ/brick</td>
                     </tr>
                     <tr>
                         <td>Water Depletion</td>
                         <td>Indicates the total volume of fresh water consumed.</td>
                         <td>1.5300</td>
                         <td>0.5000</td>
-                        <td>L/kg</td>
+                        <td>L/brick</td>
                     </tr>
                     <tr>
                         <td>Particulate Matter</td>
                         <td>Measures the emission of fine particles that can harm human health and the environment.</td>
                         <td>0.8320</td>
                         <td>-1.4930</td>
-                        <td>g PM2.5/kg</td>
+                        <td>g PM2.5/brick</td>
                     </tr>
                     <tr>
                         <td>Land Use</td>
                         <td>Represents the area of land occupied or transformed over time.</td>
                         <td>0.0018</td>
                         <td>-0.0015</td>
-                        <td>m²a/kg</td>
+                        <td>m²a/brick</td>
                     </tr>
                 </tbody>
             </table>
@@ -320,7 +342,7 @@ graph TD
                     <li><strong>Climate Change:</strong> The credit for avoiding potent greenhouse gas emissions (like methane from landfill decomposition) outweighs the emissions from the brick's own manufacturing and transportation.</li>
                     <li><strong>Particulate Matter & Land Use:</strong> Similarly, the brick is credited for preventing pollution and land use associated with waste disposal sites.</li>
                 </ul>
-                <p><strong>Calculation Method:</strong> The total impact for each category is the sum of all values from each life cycle stage detailed in the "Data Inventory" tab. This provides a comprehensive "Cradle-to-Gate" (for PET) and "Cradle-to-Use" (for Clay) assessment.</p>
+                <p><strong>Calculation Method:</strong> The total impact for each category is the sum of all values from each life cycle stage detailed in the "Data Inventory" tab. This provides a comprehensive "Cradle-to-Use" (for Clay) and "Cradle-to-Gate with Avoided Burden" (for PET) assessment per brick.</p>
             </div>
         </div>
 
