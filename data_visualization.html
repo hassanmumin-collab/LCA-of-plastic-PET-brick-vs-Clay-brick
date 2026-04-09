@@ -187,7 +187,6 @@
             <button class="tab-button active" onclick="openTab(event, 'ExecutiveSummary')">Executive Summary</button>
             <button class="tab-button" onclick="openTab(event, 'DataInventory')">Data Inventory</button>
             <button class="tab-button" onclick="openTab(event, 'Results')">Results Summary</button>
-            <button class="tab-button" onclick="openTab(event, 'Breakdown')">Impact Comparison</button>
         </div>
 
         <div id="ExecutiveSummary" class="tab-content" style="display: block;">
@@ -480,14 +479,7 @@ graph TD
             </div>
         </div>
 
-        <div id="Breakdown" class="tab-content">
-            <h2>Normalized Impact Comparison: PET Brick vs. Clay Brick (Baseline)</h2>
-            <p>This chart shows the relative performance of the PET Brick compared to the Clay Brick, which is set as the 100% baseline. Bars to the left indicate an environmental improvement (a lower impact), while bars to the right would indicate a higher impact. This method allows for a standardized comparison across different impact categories and units.</p>
-            
-            <div class="chart-container">
-                <canvas id="normalizedComparisonChart"></canvas>
-            </div>
-        </div>
+
 
     </div>
 
@@ -509,102 +501,6 @@ graph TD
                 renderDivergingChart();
                 renderLifecycleBreakdownChart();
             }
-            if (tabName === 'Breakdown') {
-                renderNormalizedChart();
-            }
-        }
-
-        let normalizedChartRendered = false;
-        function renderNormalizedChart() {
-            if (normalizedChartRendered) {
-                return;
-            }
-            normalizedChartRendered = true;
-
-            const clayImpacts = {
-                'Climate Change': 1.3944,
-                'Energy Demand': 14.2100,
-                'Water Depletion': 4.2840,
-                'Particulate Matter': 2.3296,
-                'Land Use': 0.0050
-            };
-
-            const petImpacts = {
-                'Climate Change': -5.3402,
-                'Energy Demand': 3.9648,
-                'Water Depletion': 1.1200,
-                'Particulate Matter': -3.3443,
-                'Land Use': -0.0034
-            };
-
-            const labels = Object.keys(clayImpacts);
-            const percentageData = labels.map(label => {
-                const clayValue = clayImpacts[label];
-                const petValue = petImpacts[label];
-                // Handle cases where clayValue is 0 to avoid division by zero
-                if (clayValue === 0) return 0;
-                // Calculate percentage difference relative to clay brick's impact
-                return ((petValue - clayValue) / Math.abs(clayValue)) * 100;
-            });
-
-            const ctx = document.getElementById('normalizedComparisonChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: '% Improvement / Decline vs. Clay Brick',
-                        data: percentageData,
-                        backgroundColor: percentageData.map(v => v < 0 ? '#27ae60' : '#c0392b'),
-                        borderColor: percentageData.map(v => v < 0 ? '#27ae60' : '#c0392b'),
-                        borderWidth: 1,
-                        borderRadius: 4,
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            position: 'top',
-                            title: {
-                                display: true,
-                                text: 'Performance vs. Clay Brick Baseline (%)',
-                                font: { size: 14, family: "'Segoe UI', sans-serif" }
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        y: {
-                            grid: { display: false }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false // Hide legend as colors are self-explanatory
-                        },
-                        title: {
-                            display: true,
-                            text: 'PET Brick Performance Relative to Clay Brick',
-                            font: { size: 18, family: "'Segoe UI', sans-serif", weight: 'bold' },
-                            color: '#333'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let value = context.parsed.x;
-                                    let message = value > 0 ? 'Worse' : 'Better';
-                                    return `${Math.abs(value).toFixed(0)}% ${message} than Clay Brick`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
         }
 
         // UC Berkeley Grouped Bar Chart (Vertical)
