@@ -153,6 +153,29 @@
             opacity: 0.9;
             font-style: italic;
         }
+        /* Donut Chart Container Layout */
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .chart-wrapper {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .chart-container-donut {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .chart-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -379,9 +402,20 @@ graph TD
 
             <!-- Stacked Lifecycle Stage Chart -->
             <h3>Impact Breakdown by Life Cycle Stage</h3>
-            <p>Understanding where impacts originate: Manufacturing dominates for clay brick; avoided burden from collection dominates for PET brick.</p>
-            <div class="chart-container" style="height: 400px;">
-                <canvas id="lifecycleBreakdownChart"></canvas>
+            <p>Understanding where impacts originate: See how each life cycle stage contributes to the total environmental impact for each brick type.</p>
+            <div class="chart-row">
+                <div class="chart-wrapper">
+                    <h4 style="text-align: center; color: #003262;">Clay Brick</h4>
+                    <div class="chart-container-donut">
+                        <canvas id="lifecycleClayDonut"></canvas>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <h4 style="text-align: center; color: #003262;">PET Brick</h4>
+                    <div class="chart-container-donut">
+                        <canvas id="lifecyclePetDonut"></canvas>
+                    </div>
+                </div>
             </div>
 
             <h3>Detailed Impact Table</h3>
@@ -659,13 +693,13 @@ graph TD
             });
         }
 
-        // Lifecycle Stage Breakdown Stacked Chart
-        let lifecycleChartRendered = false;
+        // Lifecycle Stage Breakdown Donut Charts
+        let lifecycleChartsRendered = false;
         function renderLifecycleBreakdownChart() {
-            if (lifecycleChartRendered) {
+            if (lifecycleChartsRendered) {
                 return;
             }
-            lifecycleChartRendered = true;
+            lifecycleChartsRendered = true;
 
             // Climate Change data by stage (per brick)
             const climateStages = {
@@ -677,69 +711,101 @@ graph TD
                 'Use Phase': { clay: 0.35, pet: 0 }
             };
 
-            const stages = Object.keys(climateStages);
-            const clayClimateData = stages.map(stage => climateStages[stage].clay);
-            const petClimateData = stages.map(stage => climateStages[stage].pet);
+            // UC Berkeley Color Palette for stages
+            const colors = ['#003262', '#FFB81C', '#6BA3D2', '#B8860B', '#003262', '#FFB81C'];
+            const stageLabelKeys = Object.keys(climateStages);
+            
+            // Clay Brick Data
+            const clayData = stageLabelKeys.map(stage => climateStages[stage].clay);
+            const clayTotal = clayData.reduce((a, b) => a + b, 0);
+            const clayPercentages = clayData.map(val => ((val / clayTotal) * 100).toFixed(1));
+            
+            // PET Brick Data (use absolute values for visualization, but track sign)
+            const petData = stageLabelKeys.map(stage => Math.abs(climateStages[stage].pet));
+            const petTotal = petData.reduce((a, b) => a + b, 0);
+            const petPercentages = petData.map(val => ((val / petTotal) * 100).toFixed(1));
 
-            const ctx = document.getElementById('lifecycleBreakdownChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
+            // Clay Brick Donut
+            const clayCtx = document.getElementById('lifecycleClayDonut').getContext('2d');
+            new Chart(clayCtx, {
+                type: 'doughnut',
                 data: {
-                    labels: stages,
-                    datasets: [
-                        {
-                            label: 'Clay Brick',
-                            data: clayClimateData,
-                            backgroundColor: '#003262',
-                            borderColor: '#003262',
-                            borderWidth: 0,
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'PET Brick',
-                            data: petClimateData,
-                            backgroundColor: '#FFB81C',
-                            borderColor: '#FFB81C',
-                            borderWidth: 0,
-                            borderRadius: 4
-                        }
-                    ]
+                    labels: stageLabelKeys.map((stage, idx) => `${stage}\n${clayPercentages[idx]}%`),
+                    datasets: [{
+                        data: clayData,
+                        backgroundColor: colors,
+                        borderColor: '#fff',
+                        borderWidth: 3
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Climate Impact (kg CO2e per brick)',
-                                font: { size: 13, family: "'Segoe UI', sans-serif", weight: 'bold' }
-                            }
-                        },
-                        x: {
-                            grid: { display: false }
-                        }
-                    },
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top',
+                            position: 'bottom',
                             labels: {
                                 color: '#333',
-                                font: { size: 12, family: "'Segoe UI', sans-serif" },
-                                padding: 15
+                                font: { size: 11, family: "'Segoe UI', sans-serif" },
+                                padding: 12,
+                                usePointStyle: true
                             }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Climate Change Impact by Life Cycle Stage',
-                            font: { size: 14, family: "'Segoe UI', sans-serif", weight: 'bold' },
-                            color: '#333'
                         },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return `${context.dataset.label}: ${context.parsed.y.toFixed(3)} kg CO2e`;
+                                    const stageIdex = context.dataIndex;
+                                    const stageName = stageLabelKeys[stageIdex];
+                                    const value = clayData[stageIdex].toFixed(3);
+                                    const percentage = clayPercentages[stageIdex];
+                                    return `${stageName}: ${value} kg CO2e (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // PET Brick Donut
+            const petCtx = document.getElementById('lifecyclePetDonut').getContext('2d');
+            new Chart(petCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: stageLabelKeys.map((stage, idx) => {
+                        const val = climateStages[stage].pet;
+                        const sign = val < 0 ? '(Avoided)' : '';
+                        return `${stage}\n${petPercentages[idx]}% ${sign}`;
+                    }),
+                    datasets: [{
+                        data: petData,
+                        backgroundColor: colors,
+                        borderColor: '#fff',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#333',
+                                font: { size: 11, family: "'Segoe UI', sans-serif" },
+                                padding: 12,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const stageIdx = context.dataIndex;
+                                    const stageName = stageLabelKeys[stageIdx];
+                                    const originalValue = climateStages[stageName].pet;
+                                    const value = Math.abs(originalValue).toFixed(3);
+                                    const percentage = petPercentages[stageIdx];
+                                    const sign = originalValue < 0 ? 'Avoided' : 'Impact';
+                                    return `${stageName}: ${value} kg CO2e (${percentage}% - ${sign})`;
                                 }
                             }
                         }
