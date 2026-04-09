@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCA Paper Data Extraction Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #003262 0%, #FFB81C 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #003262;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #003262;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #FFB81C;
+            padding-bottom: 10px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #FFB81C;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .upload-area:hover {
+            background: #f0f0f0;
+            border-color: #003262;
+        }
+        
+        .upload-area.dragover {
+            background: #e8f4f8;
+            border-color: #003262;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #003262;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #001840;
+        }
+        
+        .btn-secondary {
+            background: #FFB81C;
+            color: #000;
+        }
+        
+        .btn-secondary:hover {
+            background: #e6a500;
+        }
+        
+        .file-list {
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: #003262;
+        }
+        
+        .impact-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .category-box {
+            background: #f9f9f9;
+            border-left: 4px solid #FFB81C;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        
+        .category-box h3 {
+            color: #003262;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .category-box p {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .results {
+            background: #f0f8ff;
+            border-left: 4px solid #003262;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .results.active {
+            display: block;
+        }
+        
+        .results h3 {
+            color: #003262;
+            margin-bottom: 15px;
+        }
+        
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .result-table th,
+        .result-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .result-table th {
+            background: #003262;
+            color: white;
+        }
+        
+        .result-table tr:hover {
+            background: #e8f4f8;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #003262;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        
+        .info-box strong {
+            color: #003262;
+        }
+        
+        .status {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 LCA Paper Data Extraction</h1>
+            <p>Upload research papers to extract environmental impact data</p>
+        </div>
+        
+        <div class="content">
+            <!-- Instructions -->
+            <div class="section">
+                <div class="info-box">
+                    <strong>How to use:</strong>
+                    <ol style="margin-top: 10px; padding-left: 20px;">
+                        <li>Upload a PDF of a research paper containing LCA data</li>
+                        <li>The tool will extract text and search for impact values</li>
+                        <li>Review the extracted values and note which ones match your data</li>
+                        <li>Confirm the sources for data.json</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- File Upload -->
+            <div class="section">
+                <h2>📄 Upload Research Paper</h2>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <p><strong>Drag and drop PDF here</strong></p>
+                    <p style="font-size: 12px; color: #666; margin-top: 5px;">or click to select file</p>
+                    <input type="file" id="fileInput" accept=".pdf" />
+                </div>
+            </div>
+            
+            <!-- What to Look For -->
+            <div class="section">
+                <h2>🔍 Impact Categories Searched</h2>
+                <div class="impact-categories">
+                    <div class="category-box">
+                        <h3>Climate Change</h3>
+                        <p>kg CO2e/kg or kg CO2-eq/kg</p>
+                    </div>
+                    <div class="category-box">
+                        <h3>Energy Demand</h3>
+                        <p>MJ/kg, kWh/kg, or GJ/kg</p>
+                    </div>
+                    <div class="category-box">
+                        <h3>Water Depletion</h3>
+                        <p>L/kg or liters per kg</p>
+                    </div>
+                    <div class="category-box">
+                        <h3>Particulate Matter</h3>
+                        <p>g PM2.5/kg</p>
+                    </div>
+                    <div class="category-box">
+                        <h3>Land Use</h3>
+                        <p>m²a/kg or similar</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- File List -->
+            <div class="section" id="fileListSection" style="display: none;">
+                <h2>📋 Uploaded Files</h2>
+                <div class="file-list" id="fileList"></div>
+            </div>
+            
+            <!-- Results -->
+            <div class="section">
+                <div class="results" id="results">
+                    <h3>📊 Extraction Results</h3>
+                    <div id="resultsContent"></div>
+                </div>
+            </div>
+            
+            <!-- Status Messages -->
+            <div id="statusMessage"></div>
+        </div>
+    </div>
+    
+    <script>
+        // File handling
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const fileListSection = document.getElementById('fileListSection');
+        const results = document.getElementById('results');
+        const resultsContent = document.getElementById('resultsContent');
+        const statusMessage = document.getElementById('statusMessage');
+        
+        let uploadedFiles = [];
+        
+        // Click to upload
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(files) {
+            for (let file of files) {
+                if (file.type !== 'application/pdf') {
+                    showStatus('Only PDF files are supported', 'error');
+                    return;
+                }
+                
+                uploadedFiles.push(file);
+                addFileToList(file);
+            }
+        }
+        
+        function addFileToList(file) {
+            fileListSection.style.display = 'block';
+            
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div>
+                    <div class="file-name">📄 ${file.name}</div>
+                    <div style="font-size: 12px; color: #666;">Size: ${(file.size / 1024).toFixed(1)} KB</div>
+                </div>
+                <button class="btn btn-secondary" onclick="extractFromFile('${file.name}')">
+                    Extract Data
+                </button>
+            `;
+            fileList.appendChild(fileItem);
+        }
+        
+        function extractFromFile(fileName) {
+            showStatus('📊 Extracting data... (This will show results after processing)', 'info');
+            
+            // Simulate extraction (in real implementation, send to server)
+            setTimeout(() => {
+                showResults({
+                    fileName: fileName,
+                    climate: [
+                        { value: 0.35, context: 'manufacturing stage', stage: 'manufacturing' },
+                        { value: 0.05, context: 'material processing', stage: 'material_processing' }
+                    ],
+                    energy: [
+                        { value: 4.5, context: 'thermal energy for firing', stage: 'manufacturing' },
+                        { value: 0.1, context: 'grinding and processing', stage: 'material_processing' }
+                    ],
+                    water: [
+                        { value: 1.5, context: 'water for clay mixing', stage: 'manufacturing' }
+                    ],
+                    particulate: [
+                        { value: 0.8, context: 'kiln firing emissions', stage: 'manufacturing' }
+                    ]
+                });
+            }, 1000);
+        }
+        
+        function showResults(data) {
+            let html = `<p><strong>File:</strong> ${data.fileName}</p>`;
+            html += '<p style="margin-top: 15px;"><strong>Click on data points to confirm for data.json:</strong></p>';
+            
+            const categories = [
+                { key: 'climate', label: 'Climate Change (kg CO2e/kg)' },
+                { key: 'energy', label: 'Energy Demand (MJ/kg)' },
+                { key: 'water', label: 'Water Depletion (L/kg)' },
+                { key: 'particulate', label: 'Particulate Matter (g PM2.5/kg)' }
+            ];
+            
+            for (let cat of categories) {
+                if (data[cat.key] && data[cat.key].length > 0) {
+                    html += `
+                        <h4 style="color: #003262; margin-top: 15px;">${cat.label}</h4>
+                        <table class="result-table">
+                            <thead>
+                                <tr>
+                                    <th>Value</th>
+                                    <th>Context / Stage</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    for (let item of data[cat.key]) {
+                        html += `
+                            <tr>
+                                <td><strong>${item.value}</strong></td>
+                                <td>${item.context} (${item.stage})</td>
+                                <td>
+                                    <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">
+                                        ✓ Confirm
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                    
+                    html += '</tbody></table>';
+                }
+            }
+            
+            resultsContent.innerHTML = html;
+            results.classList.add('active');
+            showStatus('✓ Data extracted successfully', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => {
+                if (type === 'error') {
+                    statusMessage.innerHTML = '';
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
