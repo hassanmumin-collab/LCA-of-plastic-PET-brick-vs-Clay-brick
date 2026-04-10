@@ -1,0 +1,31 @@
+Life Cycle Stage,Impact Category,Value,Unit,Source,Notes
+Raw Material Acquisition,Climate Change,0.002,kg CO2e/kg,Your source here,Description
+Raw Material Acquisition,Energy Demand,0.03,MJ/kg,Your source here,Description
+Raw Material Acquisition,Water Depletion,0.0,L/kg,Your source here,Description
+Raw Material Acquisition,Particulate Matter,0.005,g PM2.5/kg,Your source here,Description
+Raw Material Acquisition,Land Use,0.001,m²a/kg,Your source here,Description
+Material Processing,Climate Change,0.005,kg CO2e/kg,Your source here,Description
+Material Processing,Energy Demand,0.1,MJ/kg,Your source here,Description
+Material Processing,Water Depletion,0.0,L/kg,Your source here,Description
+Material Processing,Particulate Matter,0.01,g PM2.5/kg,Your source here,Description
+Material Processing,Land Use,0.0,m²a/kg,Your source here,Description
+Manufacturing,Climate Change,0.35,kg CO2e/kg,Your source here,Description
+Manufacturing,Energy Demand,4.5,MJ/kg,Your source here,Description
+Manufacturing,Water Depletion,1.5,L/kg,Your source here,Description
+Manufacturing,Particulate Matter,0.8,g PM2.5/kg,Your source here,Description
+Manufacturing,Land Use,0.0005,m²a/kg,Your source here,Description
+Transportation,Climate Change,0.015,kg CO2e/kg,Your source here,Description
+Transportation,Energy Demand,0.2,MJ/kg,Your source here,Description
+Transportation,Water Depletion,0.0,L/kg,Your source here,Description
+Transportation,Particulate Matter,0.002,g PM2.5/kg,Your source here,Description
+Transportation,Land Use,0.0,m²a/kg,Your source here,Description
+Packaging,Climate Change,0.001,kg CO2e/kg,Your source here,Description
+Packaging,Energy Demand,0.02,MJ/kg,Your source here,Description
+Packaging,Water Depletion,0.0,L/kg,Your source here,Description
+Packaging,Particulate Matter,0.0,g PM2.5/kg,Your source here,Description
+Packaging,Land Use,0.0,m²a/kg,Your source here,Description
+Use Phase,Climate Change,0.125,kg CO2e/kg,Your source here,Description
+Use Phase,Energy Demand,0.225,MJ/kg,Your source here,Description
+Use Phase,Water Depletion,0.03,L/kg,Your source here,Description
+Use Phase,Particulate Matter,0.015,g PM2.5/kg,Your source here,Description
+Use Phase,Land Use,0.0003,m²a/kg,Your source here,Description
