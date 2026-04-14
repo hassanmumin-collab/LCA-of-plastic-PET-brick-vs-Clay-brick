@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LCA Data Visualization</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         body {
@@ -507,9 +506,6 @@ graph LR
     </div>
 
     <script>
-        // Register Chart.js plugins
-        Chart.register(ChartDataLabels);
-
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -681,19 +677,6 @@ graph LR
                             padding: 12,
                             titleFont: { size: 12 },
                             bodyFont: { size: 11 }
-                        },
-                        datalabels: {
-                            display: true,
-                            color: '#fff',
-                            font: {
-                                size: 13,
-                                weight: 'bold',
-                                family: "'Segoe UI', sans-serif"
-                            },
-                            formatter: function(value, context) {
-                                return value.toFixed(2) + '\nkg CO₂e';
-                            },
-                            textAlign: 'center'
                         }
                     }
                 },
