@@ -429,7 +429,7 @@ graph LR
             <!-- Climate Impact Gauge (Avoided Burden Benefit) -->
             <h3>PET Net Climate Impact - Avoided Burning Creates Climate Positive Result</h3>
             <p>PET brick production creates 1.31 kg CO₂e in upstream emissions (raw material, manufacturing, transport). However, diverting 1.8 kg of waste PET from open burning in Kenya/Somalia avoids 1.98 kg CO₂e, resulting in a net <strong>climate benefit of 0.66 kg CO₂e per brick</strong>. The avoided burden credit more than offsets all production impacts.</p>
-            <div class="chart-container" style="height: 320px; max-width: 380px; margin: 0 auto;">
+            <div class="chart-container" style="height: 480px; max-width: 600px; margin: 0 auto;">
                 <canvas id="climateWaterfallChart"></canvas>
             </div>
 
@@ -642,8 +642,8 @@ graph LR
             const width = canvas.width;
             const height = canvas.height;
             const centerX = width / 2;
-            const centerY = height * 0.65; // Position gauge lower
-            const radius = Math.min(width, height) * 0.35;
+            const centerY = height * 0.58; // Position gauge lower
+            const radius = Math.min(width, height) * 0.38;
             
             // Clear canvas
             ctx.fillStyle = '#fff';
@@ -651,34 +651,34 @@ graph LR
             
             // Draw speedometer arc background (light gray)
             ctx.strokeStyle = '#e0e0e0';
-            ctx.lineWidth = 30;
+            ctx.lineWidth = 40;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, Math.PI, 0, false);
             ctx.stroke();
             
-            // Draw green section (benefit: left 60%)
-            ctx.strokeStyle = '#2E7D32';
-            ctx.lineWidth = 30;
+            // Draw Berkeley blue section (benefit: left 60%)
+            ctx.strokeStyle = '#003262';
+            ctx.lineWidth = 40;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, Math.PI, Math.PI + (Math.PI * 0.60), false);
             ctx.stroke();
             
-            // Draw amber section (production: right 40%)
-            ctx.strokeStyle = '#FFC107';
-            ctx.lineWidth = 30;
+            // Draw Berkeley gold section (production: right 40%)
+            ctx.strokeStyle = '#FDB927';
+            ctx.lineWidth = 40;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, Math.PI + (Math.PI * 0.60), 0, false);
             ctx.stroke();
             
-            // Calculate needle angle (points to 60% position = into green)
+            // Calculate needle angle (points to 60% position = into blue)
             const needleAngle = Math.PI + (Math.PI * 0.60);
-            const needleLength = radius - 20;
+            const needleLength = radius - 25;
             const needleEndX = centerX + needleLength * Math.cos(needleAngle);
             const needleEndY = centerY + needleLength * Math.sin(needleAngle);
             
             // Draw needle
-            ctx.strokeStyle = '#1B1B1B';
-            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#003262';
+            ctx.lineWidth = 7;
             ctx.lineCap = 'round';
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
@@ -686,46 +686,46 @@ graph LR
             ctx.stroke();
             
             // Draw needle pivot circle
-            ctx.fillStyle = '#1B1B1B';
+            ctx.fillStyle = '#003262';
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 10, 0, 2 * Math.PI);
+            ctx.arc(centerX, centerY, 13, 0, 2 * Math.PI);
             ctx.fill();
             
             ctx.strokeStyle = '#fff';
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 10, 0, 2 * Math.PI);
+            ctx.arc(centerX, centerY, 13, 0, 2 * Math.PI);
             ctx.stroke();
             
             // Draw side labels
-            ctx.font = 'bold 13px "Segoe UI", sans-serif';
-            ctx.fillStyle = '#2E7D32';
+            ctx.font = 'bold 16px "Segoe UI", sans-serif';
+            ctx.fillStyle = '#003262';
             ctx.textAlign = 'right';
-            ctx.fillText('BENEFIT', centerX - radius - 20, centerY + 5);
+            ctx.fillText('BENEFIT', centerX - radius - 25, centerY + 8);
             
-            ctx.fillStyle = '#FFC107';
+            ctx.fillStyle = '#FDB927';
             ctx.textAlign = 'left';
-            ctx.fillText('PRODUCTION', centerX + radius + 20, centerY + 5);
+            ctx.fillText('PRODUCTION', centerX + radius + 25, centerY + 8);
             
             // Draw values at min/max
-            ctx.font = '11px "Segoe UI", sans-serif';
+            ctx.font = '13px "Segoe UI", sans-serif';
             ctx.fillStyle = '#666';
             ctx.textAlign = 'center';
             
             // Left value (emissions)
-            ctx.fillText('1.31 kg CO₂e', centerX - radius * 0.55, centerY + 50);
+            ctx.fillText('1.31 kg CO₂e', centerX - radius * 0.55, centerY + 70);
             // Right value (benefit)
-            ctx.fillText('1.98 kg CO₂e', centerX + radius * 0.55, centerY + 50);
+            ctx.fillText('1.98 kg CO₂e', centerX + radius * 0.55, centerY + 70);
             
             // Draw center value (net result)
-            ctx.font = 'bold 20px "Segoe UI", sans-serif';
-            ctx.fillStyle = '#2E7D32';
+            ctx.font = 'bold 28px "Segoe UI", sans-serif';
+            ctx.fillStyle = '#003262';
             ctx.textAlign = 'center';
-            ctx.fillText('-0.66 kg CO₂e', centerX, height * 0.92);
+            ctx.fillText('-0.66 kg CO₂e', centerX, height * 0.90);
             
-            ctx.font = '12px "Segoe UI", sans-serif';
-            ctx.fillStyle = '#1B5E20';
-            ctx.fillText('NET CLIMATE BENEFIT', centerX, height * 0.98);
+            ctx.font = '14px "Segoe UI", sans-serif';
+            ctx.fillStyle = '#003262';
+            ctx.fillText('NET CLIMATE BENEFIT', centerX, height * 0.97);
         }
 
         // Lifecycle Stage Breakdown Donut Charts
