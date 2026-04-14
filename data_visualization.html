@@ -90,6 +90,20 @@
             margin-top: -20px;
             padding-bottom: 20px;
         }
+        .notes-list {
+            margin: 15px 0 20px 20px;
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+        .notes-list li {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #555;
+        }
+        .notes-list strong {
+            color: #003262;
+            font-weight: 600;
+        }
         .summary-section {
             margin-bottom: 25px;
             padding: 20px;
@@ -388,6 +402,21 @@ graph LR
             </table>
             <h3>Data Quality & Source Documentation</h3>
             <p class="notes"><em>This LCA assessment synthesizes data from peer-reviewed academic literature, industry reports, and standardized databases. All raw material, manufacturing, and transportation values are derived from published lifecycle inventory data (Ecoinvent 3.8, ReCiPe 2016) with sub-Saharan Africa and Kenya-specific parameters where available. The avoided burning credit for PET follows ISO 14044 system expansion methodology, using IPCC 2006 guidelines for open burning emission factors and carbon content calculations. Key references include Olweny et al. (2017) for clay brick manufacturing, Choudhary et al. (2019) for PET recycling LCA, and Kenya road freight data (2021) for transport emission factors. All assumptions, data gaps, and uncertainty ranges are documented in the Data Inventory tab. The assessment prioritizes transparency: where data uncertainty exists, conservative estimates are used to avoid overstating environmental benefits.</em></p>
+
+            <h3>7. Limitations and Uncertainty</h3>
+            <p class="notes"><em>This assessment acknowledges several methodological limitations that affect the certainty and geographic representativeness of results:</em></p>
+            <ul class="notes-list">
+                <li><strong>Geographic proxy data:</strong> No Kenya-specific or East Africa-specific primary measurement data exists for the majority of inventory entries in either system. All figures rely on proxy data from other geographies (Mediterranean, South Asia, North Africa) with documented transferability caveats. Manufacturing emissions for clay bricks are based on Mediterranean sources; PET data originate from a single lab-scale study in Egypt. Actual Sub-Saharan production conditions may differ materially, particularly energy grid composition, fuel types, and transport distances.</li>
+                
+                <li><strong>Limited industrial-scale PET data:</strong> The PET brick system is based primarily on a single peer-reviewed lab-scale study (Ashraf et al., 2024) conducted in Egypt under controlled experimental conditions. Industrial-scale production data for lego-interlocking PET bricks manufactured in Sub-Saharan Africa does not exist in published literature. Manufacturing efficiency, material yields, scrap rates, and energy requirements at scale remain unmeasured and may differ significantly from laboratory results.</li>
+                
+                <li><strong>End-of-life pathway uncertainty (PET):</strong> The climate benefit advantage of the PET system is heavily conditional on reuse or controlled disposal pathways that have not been demonstrated at operational scale in the study region. The assumed zero-GHG reuse scenario depends on: (1) bricks retaining sufficient structural integrity after service life, and (2) a functioning market for dematerialized, reusable building components in East Africa—neither of which currently exists. Alternative disposal pathways (open burning, uncontrolled landfilling, or incineration) would shift the climate balance decisively in favor of clay.</li>
+                
+                <li><strong>Microplastic emissions (data gap):</strong> Microplastic releases during the service life of PET bricks in occupied buildings represent an understudied environmental and human health risk that is not captured by any standard LCA impact assessment methodology. Leaching of plasticizers, UV-induced fragmentation, and mechanical wear of interlocking surfaces may generate airborne and settled microplastics in indoor environments. This impact category is explicitly excluded from this assessment by necessity—not by judgement that the risk is negligible—and represents a significant uncertainty. Future research on PET building material durability and microplastic emissions is essential before large-scale deployment.</li>
+                
+                <li><strong>Temporal uncertainty:</strong> Long-term structural and environmental performance of PET lego bricks under East African tropical/subtropical climate conditions (high humidity, temperature cycles, UV exposure, biological weathering) is not documented. Assumptions about material degradation rates, compressive strength retention, and dimensional stability after 20–30 years of service lack empirical support in the study region.</li>
+            </ul>
+            <p class="notes"><em><strong>Interpretation guidance:</strong> These limitations mean that the quantitative comparison (PET -0.66 vs Clay +0.69 kg CO₂e) should be interpreted as indicative rather than definitive. The direction of the climate advantage (PET lower under reuse assumptions) is robust; however, the magnitude may shift significantly with region-specific data, industrial-scale production parameters, and realistic end-of-life pathways. Sensitivity analysis on key assumptions (transport distance, energy grid mix, discount rate on avoided burden) is provided in the Data Inventory tab.</em></p>
         </div>
 
         <div id="Results" class="tab-content">
