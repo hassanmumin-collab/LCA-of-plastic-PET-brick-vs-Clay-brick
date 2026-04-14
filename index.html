@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCA Data Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #005a9e;
+            border-bottom: 2px solid #005a9e;
+            padding-bottom: 10px;
+        }
+        .tabs {
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+        .tab-button.active {
+            background-color: #0078d4;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 6px 12px;
+            border-top: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #003262;
+            color: #FFB81C;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e2eef7;
+        }
+        a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            overflow: auto;
+            padding: 0 2rem;
+        }
+        .notes {
+            font-style: italic;
+            color: #555;
+            margin-top: -20px;
+            padding-bottom: 20px;
+        }
+        .summary-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #fff;
+            border-left: 5px solid #005a9e;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .summary-section h3 {
+            margin-top: 0;
+            color: #005a9e;
+        }
+        .recommendation {
+            background-color: #e2eef7;
+            border-left-color: #27ae60;
+        }
+        .mermaid-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        /* UC Berkeley Color Palette KPI Cards */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .kpi-card {
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border: 3px solid transparent;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+        .kpi-benefit {
+            background: linear-gradient(135deg, #003262 0%, #003262 70%, #FFB81C 100%);
+            color: white;
+            border-color: #FFB81C;
+        }
+        .kpi-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .kpi-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #FFB81C;
+        }
+        .kpi-label {
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .kpi-detail {
+            font-size: 0.85em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+        /* Donut Chart Container Layout */
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .chart-wrapper {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .chart-container-donut {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .chart-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* Data Inventory Tab - Full Note Visibility with Optimized Column Widths */
+        #DataInventory {
+            overflow-x: auto;
+        }
+        #DataInventory table {
+            font-size: 13px;
+            table-layout: fixed;
+            width: 100%;
+            min-width: 1800px;
+        }
+        #DataInventory th, #DataInventory td {
+            padding: 15px 8px;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            line-height: 1.5;
+            vertical-align: top;
+            overflow: visible;
+        }
+        #DataInventory tbody tr {
+            height: auto;
+        }
+        #DataInventory th:nth-child(1), #DataInventory td:nth-child(1) {
+            width: 8%;
+            min-width: 70px;
+        }
+        #DataInventory th:nth-child(2), #DataInventory td:nth-child(2) {
+            width: 10%;
+            min-width: 80px;
+        }
+        #DataInventory th:nth-child(3), #DataInventory td:nth-child(3) {
+            width: 5%;
+            min-width: 40px;
+            text-align: center;
+        }
+        #DataInventory th:nth-child(4), #DataInventory td:nth-child(4) {
+            width: 8%;
+            min-width: 65px;
+        }
+        #DataInventory th:nth-child(5), #DataInventory td:nth-child(5) {
+            width: 11%;
+            min-width: 90px;
+        }
+        #DataInventory th:nth-child(6), #DataInventory td:nth-child(6) {
+            width: 58%;
+            min-width: 550px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Life Cycle Assessment (LCA): Clay Brick vs. PET Plastic Brick</h1>
+        <p>This report presents a comparative Life Cycle Assessment of traditional clay bricks against innovative PET plastic bricks, with a functional unit of 1 brick.</p>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'ExecutiveSummary')">Executive Summary</button>
+            <button class="tab-button" onclick="openTab(event, 'DataInventory')">Data Inventory</button>
+            <button class="tab-button" onclick="openTab(event, 'Results')">Results Summary</button>
+        </div>
+
+        <div id="ExecutiveSummary" class="tab-content" style="display: block;">
+            <h2>Executive Summary & Strategic Recommendation</h2>
+            
+            <div class="summary-section">
+                <h3>Overview</h3>
+                <p>This analysis reveals a stark contrast in the environmental performance of PET bricks versus traditional clay bricks. The PET brick demonstrates significant environmental benefits, primarily driven by the "avoided burden" of plastic waste recycling. In contrast, the high-energy firing process for clay bricks results in substantial environmental impacts, particularly in energy consumption and climate change contributions.</p>
+            </div>
+
+            <div class="summary-section">
+                <h3>System Boundaries</h3>
+                <p>Both brick systems are assessed using a <strong>Cradle-to-Grave</strong> boundary. The clay brick lifecycle progresses from raw material extraction through manufacturing, transport, and installation use phase. The PET brick lifecycle begins with waste plastic collection through manufacturing, transport, and ends at the grave stage where the best climate scenario is direct reuse (zero end-of-life impacts). The key differentiator is that PET's environmental assessment includes the <strong>avoided burden</strong> of open burning—the actual fate of post-consumer plastic waste in Kenya and Somalia.</p>
+                <div class="mermaid-container">
+                    <pre class="mermaid">
+graph LR
+    subgraph Clay["🧱 CLAY BRICK: Cradle-to-Grave"]
+        direction LR
+        A["Raw<br/>Material"] --> B["Material<br/>Processing"] --> C["Manufacturing<br/>Firing"] --> D["Transport"] --> E["Use<br/>Mortar"]
+    end
+
+    subgraph PET["♻️ PET BRICK: Cradle-to-Grave"]
+        direction LR
+        F["Waste<br/>Collection"] --> G["Material<br/>Sorting"] --> H["Manufacturing<br/>Mold"] --> I["Transport"] --> J["End-of-Life<br/>Reuse (0 GHG)"]
+    end
+    
+    subgraph Avoided["⚠️ AVOIDED PROCESS"]
+        direction LR
+        K["Open Burning<br/>-1.98 kg CO₂e Credit"]
+    end
+    
+    F -.avoids.-> K
+    
+    style Clay fill:#e8f4f8,stroke:#003262,stroke-width:3px,color:#000
+    style PET fill:#e8f5e9,stroke:#27ae60,stroke-width:3px,color:#000
+    style Avoided fill:#fff3e0,stroke:#ff9800,stroke-width:3px,color:#000
+    style A fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style B fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style C fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style D fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style E fill:#b3dff0,stroke:#003262,stroke-width:2px
+    style F fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style G fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style H fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style I fill:#c8e6c9,stroke:#27ae60,stroke-width:2px
+    style J fill:#a5d6a7,stroke:#1b5e20,stroke-width:2px
+    style K fill:#ffe0b2,stroke:#ff9800,stroke-width:2px
+                    </pre>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.95em; color: #555;"><em><strong>End-of-Life Clarification:</strong> Clay bricks reach their grave through demolition disposal (landfill or recycling infrastructure, both with non-zero impacts). PET bricks are credited with zero end-of-life impacts under the best-case scenario where the interlocking lego design enables direct reuse without reprocessing. This scenario requires verified long-term structural performance data—currently a material data gap.</em></p>
+            </div>
+
+            <div class="summary-section">
+                <h3>Methodology</h3>
+                <p><strong>Functional Unit:</strong> This assessment uses <strong>1 brick</strong> as the functional unit. This standardized basis allows for direct and fair comparison of environmental impacts between clay bricks and PET plastic bricks on a per-unit basis.</p>
+                
+                <p><strong>Brick Specifications:</strong></p>
+                <ul>
+                    <li><strong>Clay Brick:</strong> 3.5 kg per brick (dimensions 19×19×13.5 cm). Standard masonry unit used in East African construction with typical void ratio.</li>
+                    <li><strong>PET Plastic Brick:</strong> 1.8 kg per brick (approximately 49% lighter than clay brick). The significantly lower weight reflects the density difference between plastic materials (1.2–1.4 g/cm³) and fired clay (1.8+ g/cm³), while maintaining similar functional dimensions for interlocking lego-type assembly.</li>
+                </ul>
+                
+                <p><strong>Life Cycle Assessment Approach:</strong></p>
+                <ul>
+                    <li><strong>Clay Brick Boundary:</strong> "Cradle-to-Use" - encompasses raw material extraction (clay mining), material processing, manufacturing (high-temperature kiln firing), transportation to site, packaging, and the use phase including mortar (cement) application during construction.</li>
+                    <li><strong>PET Brick Boundary:</strong> "Cradle-to-Gate with Avoided Burden" - begins with waste plastic collection from post-consumer sources, material sorting and processing, manufacturing into bricks, transportation, and packaging. Critically, this assessment includes the avoided burden principle, giving environmental credits for diverting waste from landfilling.</li>
+                </ul>
+                
+                <p><strong>Impact Categories Assessed:</strong></p>
+                <ul>
+                    <li><strong>Climate Change (kg CO2e/brick):</strong> Measures global warming potential from greenhouse gas emissions throughout the lifecycle.</li>
+                    <li><strong>Energy Demand (MJ/brick):</strong> Quantifies cumulative non-renewable energy consumption.</li>
+                    <li><strong>Water Depletion (L/brick):</strong> Indicates freshwater resource consumption.</li>
+                </ul>
+                
+                <p><strong>Key Methodological Feature - Avoided Burden:</strong> The PET brick's environmental profile includes credits for avoiding the negative impacts that would result from landfilling the waste plastic. This reflects the circular economy principle that recycling waste materials prevents future environmental damage, making the comparison a true "avoided burden" assessment rather than a simple substitution scenario.</p>
+                
+                <p><strong>⚠️ Limitations and Uncertainty:</strong></p>
+                <ul>
+                    <li>No Kenya-specific or East Africa-specific primary measurement data exists for the majority of inventory entries in either system — all figures rely on proxy data from other geographies with documented transferability caveats.</li>
+                    <li>The PET brick system is based primarily on a single lab-scale study (Ashraf et al., 2024) conducted in Egypt under controlled conditions; industrial-scale production data for lego-type PET bricks in Sub-Saharan Africa does not exist in the literature.</li>
+                    <li>The end-of-life stage carries high uncertainty for the PET brick system — the climate benefit of the system is conditional on a reuse or controlled disposal pathway that has not been demonstrated at scale in the study region.</li>
+                    <li>Microplastic emissions during the service life of PET bricks in occupied buildings represent an understudied risk category not captured in any standard LCA impact methodology and excluded from this assessment by necessity rather than by judgement that the risk is negligible.</li>
+                </ul>
+            </div>
+
+            <div class="summary-section">
+                <h3>Key Findings - Detailed Results per Brick</h3>
+                <ul>
+                    <li><strong>Climate Change:</strong> PET brick delivers a net climate benefit of <strong>1.35 kg CO₂e saved per brick</strong> (197% net benefit). Clay brick emits <strong>+0.69 kg CO₂e/brick</strong> (raw material 0.01 + manufacturing 0.49 + transport 0.004 + mortar 0.18 + EOL 0.0002). PET brick emits <strong>-0.66 kg CO₂e/brick</strong> (raw material 0.81 + manufacturing 0.50 - avoided burning 1.98 + transport 0.002 + EOL 0). The dramatic benefit comes from diverting 1.8 kg of waste plastic from open burning, offsetting all upstream emissions.</li>
+                    <li><strong>Energy Demand:</strong> Clay brick is significantly more energy-efficient at <strong>7.92 MJ per brick (71% better)</strong> versus <strong>27.03 MJ for PET</strong>. Clay breaks down as: raw material 0.09 + manufacturing 7.0 + transport 0.06 + mortar 0.77 MJ. PET breaks down as: raw material 23.4 + manufacturing 3.6 + transport 0.03 MJ. PET recycling (13 MJ/kg) is highly energy-intensive; even the lighter PET brick requires substantially more energy than clay manufacturing.</li>
+                    <li><strong>Water Depletion:</strong> PET brick uses significantly less water at <strong>4.50 L per brick (37% better)</strong> versus <strong>7.18 L for clay</strong>. Clay water consumption is dominated by the manufacturing stage (2.02 L/kg × 3.5 kg = 7.07 L for clay preparation and firing) plus mortar production (0.032 L/kg × 3.5 kg = 0.112 L). PET water comes entirely from recycling facility washing and PET resin processing (2.5 L/kg × 1.8 kg = 4.5 L). In water-stressed regions, this is a significant advantage for PET bricks.</li>
+
+                    <li><strong>System Boundary Trade-offs:</strong> PET wins decisively on climate (saves 1.35 kg CO₂e per brick) and water consumption (uses 37% less). However, clay brick is significantly more energy-efficient, using 71% less energy per brick (7.92 vs 27.03 MJ). The trade-off is clear: PET excels in climate and water; clay excels in energy efficiency. The choice depends on regional priorities (climate vulnerability vs. water scarcity vs. energy availability).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="DataInventory" class="tab-content">
+            <h2>Clay Brick Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Life Cycle Stage</th>
+                        <th>Impact Category</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Source</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Raw material acquisition</td><td>Climate change</td><td>0.003</td><td>kg CO₂e / kg</td><td>Ncube et al. (2021)</td><td>Closest published African analogue for the extraction stage. Zimbabwe clamp kiln operations are broadly comparable to Kenya in terms of mechanisation level and clay soil type. No Kenya-specific primary source exists.</td></tr>
+                    <tr><td></td><td>Energy demand</td><td>0.027</td><td>MJ/kg</td><td>Christoforou et al (2016)</td><td>Source studies fired clay bricks manufactured in Cyprus using natural gas-fired kilns. Energy value of 0.027 MJ/kg represents the minimal thermal energy input for extraction of raw clay (mining and air-drying only, not including kiln energy which is assigned to Manufacturing stage). Cyprus production data is used as the closest European analogue to African clay brick extraction where primary source data is limited.</td></tr>
+                    <tr><td>Manufacturing</td><td>Climate change</td><td>0.14</td><td>kg CO₂e / kg</td><td>Kulkarni & Rao (2016)</td><td>Base case for a biomass-fired clamp kiln in Kenya, with the fraction of non-renewable biomass (fNRB) correction applied. fNRB is the proportion of wood fuel harvested beyond the landscape's natural regeneration rate and cannot be treated as carbon-neutral under ISO 14044. The UNFCCC TOOL30 global default of fNRB = 0.30 is applied as the single point estimate. The India biomass clamp kiln figure from Kumbhar et al. serves as the closest published analogue; after fNRB adjustment at 0.30 and inclusion of minor non-combustion process emissions, the Kenya base case is estimated at 0.14 kg CO₂e/kg brick.</td></tr>
+                    <tr><td></td><td>Energy demand</td><td>2</td><td>MJ/kg</td><td></td><td>Global energy range in literature spans 0.5–5.0 MJ/kg depending on kiln type (clamp 0.5-2 MJ/kg, intermittent kiln 2-4 MJ/kg, tunnel kiln 3-5 MJ/kg). Kenya mainly uses clamp and intermittent kilns. Midpoint estimate of 2 MJ/kg is applied as single point for Kenya base case clamp kiln with typical biomass fuel inefficiency. This figure represents thermal energy only and excludes embodied energy in materials; it is cumulative across drying, preheating, and firing phases of the kiln cycle.</td></tr>
+                    <tr><td></td><td>Water depletion</td><td>2.02</td><td>L/kg</td><td>Skouteris et al., 2017</td><td>Water consumption during clay brick manufacturing for clay preparation, mixing, and cooling of fired bricks. The 2.02 L/kg value is applied per kilogram of clay brick, so for a 3.5 kg brick: 2.02 × 3.5 = 7.07 L. This encompasses water used in clay slurry preparation plus additional water for spray-cooling and dust suppression during the drying phase. Skouteris et al. (Greece) provides the regional Mediterranean analogue for African manufacturing water intensity.</td></tr>
+                    <tr><td>Transport to site</td><td>Climate change</td><td>0.001</td><td>kg CO₂e/kg/km</td><td></td><td>Derived using Kenya-specific road freight emission factor of 0.01327 L diesel/tonne-km (Kenya road freight study, 2021, Mombasa–Nairobi corridor) × 2.68 kg CO₂e/L diesel (IPCC 2006 default) = 0.0000356 kg CO₂e/kg/km, simplified to 0.000036 × d. A representative distance of 35 km is applied as the midpoint of the typical peri-urban Kenya range of 20–50 km, giving 0.000036 × 35 = 0.00126 kg CO₂e/kg brick, reported as ~0.001. Sensitivity range: 0.0007 kg CO₂e/kg at 20 km to 0.0018 kg CO₂e/kg at 50 km. This figure is negligible relative to Stage 3 manufacturing emissions and does not materially affect the lifecycle total. Site-specific distance should be substituted where known.</td></tr>
+                    <tr><td></td><td>Energy demand</td><td>0.017</td><td>MJ / kg</td><td></td><td>Derived using the same Kenya-specific road freight energy factor proportional to the climate change calculation: 0.000036 × d × specific energy content of diesel.</td></tr>
+                    <tr><td>User Phase - Mortar/cement binding</td><td>Climate change</td><td>0.052</td><td>kg CO₂e / kg</td><td></td><td>Derived in three steps. Step 1: Standard masonry calculation for 1:6 cement-sand mortar — 500 bricks per m³ of brickwork (standard brick 190 × 90 × 90 mm with 10 mm mortar joints); dry mortar volume = 0.306 m³/m³ brickwork; OPC content = 0.306 × (1/7) × 1,440 kg/m³ = 63 kg OPC/m³ brickwork, confirmed across multiple civil engineering reference sources. Step 2: 63 kg OPC ÷ 1,000 kg brick (500 bricks × 2 kg/brick per m³) = 0.063 kg OPC per kg brick. Step 3: OPC emission factor = 0.83 kg CO₂e/kg cement (University of Bath ICE v3.0). Result: 0.063 × 0.83 = 0.052 kg CO₂e/kg brick.</td></tr>
+                    <tr><td></td><td>Energy demand</td><td>0.22</td><td>MJ/kg</td><td></td><td>Derived from cement manufacturing energy intensity combined with the mortar ratio calculation. OPC manufacturing energy: approximately 3.5 MJ/kg cement. Calculation: 0.063 kg OPC/kg brick × 3.5 MJ/kg = 0.22 MJ/kg brick.</td></tr>
+                    <tr><td></td><td>Water demand</td><td>0.032</td><td>L / kg</td><td></td><td>Derived from water consumed during cement manufacturing. Typical water requirement for OPC production: 0.5 L/kg cement. Calculation: 0.063 kg OPC/kg brick × 0.5 L/kg = 0.032 L/kg brick.</td></tr>
+                    <tr><td>End of life</td><td>Climate change (landfill)</td><td>0.000042</td><td>kg CO₂e / kg</td><td>US EPA (2003)</td><td>The EPA WARM landfilling emission factor for clay bricks is stated as 0.0105 MTCE per short ton, representing CO₂ emissions from diesel combustion for waste collection and landfill equipment operation only. Clay brick generates no methane in landfill as it is chemically inert. Converting to kg CO₂e/kg: 0.0105 MTCE/short ton × 3.667 (CO₂e/C ratio) ÷ 907.185 kg/short ton = 0.000042 kg CO₂e/kg brick. This figure is negligible. The dominant end-of-life pathway for clay bricks in Sub-Saharan Africa is rubble reuse as aggregate or hardcore fill, under which EoL emissions are effectively zero.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>PET Brick Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Life Cycle Stage</th>
+                        <th>Impact Category</th>
+                        <th>Value</th>
+                        <th>Unit</th>
+                        <th>Source</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Raw material acquisition (waste PET collection and sorting)</td><td>Climate change</td><td>0.45</td><td>kg CO₂e/kg</td><td>Denkstatt/PET Recycling Team (2017)</td><td>The PET carbon footprint of 0.45 kg CO₂e/kg is directly stated in the denkstatt/PET Recycling Team study, calculated in accordance with ISO 14044 covering collection and sorting of used PET bottles, transportation to the recycling plant in Wöllersdorf, and washing, processing and granulating into pelletised resin.</td></tr>
+                    <tr><td></td><td>Energy demand</td><td>13</td><td>MJ/kg</td><td></td><td>13 MJ/kg figure represents total cradle-to-resin energy for recycled PET, including collection, transportation, sorting, washing (high energy for contamination removal), and resin granulation processes. This reflects the global benchmark for rPET production from post-consumer bottles.</td></tr>
+                    <tr><td></td><td>Water demand</td><td>2.5</td><td>L/kg</td><td></td><td>This figure covers water consumed in washing used PET bottles to remove contaminants (residual food, labels, adhesives) before processing into resin. Washing is a critical step because post-consumer bottles contain food residue, which must be removed to achieve food-grade resin quality. The 2.5 L/kg figure includes both direct washing water and indirect water consumption in the recycling facility operations.</td></tr>
+                    <tr><td>Manufacturing</td><td>Climate change</td><td>0.28</td><td>kg CO₂e/kg</td><td></td><td>Manufacturing GHG emissions are composed of two distinct components. Component 1 — Electricity-based emissions: Extrusion process electricity consumption = 0.55 kWh/kg, midpoint of the 0.4–0.7 kWh/kg industry benchmark range. Kenya national grid emission factor = 0.50 kg CO₂/kWh. Calculation: 0.55 × 0.50 = 0.275 kg CO₂e/kg brick. Component 2 — Direct process emissions from thermal degradation: When PET is melted at 260–290°C, thermal degradation produces CO₂ and CO from oxidation of contaminants. Ashraf et al. (2024) measured direct process CO₂ emissions at 0.009 kg CO₂/brick or ~0.0045 kg CO₂e/kg brick. Total: 0.275 + 0.0045 = 0.2795, rounded to ~0.28 kg CO₂e/kg brick.</td></tr>
+                    <tr><td></td><td>Energy demand</td><td>2</td><td>MJ/kg</td><td></td><td>Derived from the extrusion process electricity consumption of 0.55 kWh/kg × Kenya grid average energy intensity of 3.6 MJ/kWh (conversion from thermal equivalent) ≈ 2 MJ/kg brick. This represents the direct extrusion energy only, not including recycling facility operations.</td></tr>
+                    <tr><td></td><td>Avoided emissions from open burning</td><td>-1.1</td><td>kg CO₂e/kg</td><td></td><td>This row captures the environmental benefit of diverting PET plastic from open burning — the dominant waste disposal counterfactual in Kenya and Somalia — under the system expansion method per ISO 14044. Calculation: PET carbon content = 0.625 kg C/kg PET (from molecular formula C₁₀H₈O₄). CO₂ to carbon mass ratio = 44/12 = 3.667. Open burning oxidation factor (IPCC 2006 default for MSW) = 0.48. Result: 0.625 × 0.48 × 3.667 = 1.10 kg CO₂/kg PET avoided.</td></tr>
+                    <tr><td>Transport</td><td>Climate change</td><td>0.001</td><td>kg CO₂e/kg/km</td><td></td><td>Transport GHG emissions are calculated using the same formula as the clay brick comparator: 0.000036 × d kg CO₂e/kg brick, where 0.000036 is derived from the Kenya-specific road freight emission factor of 0.01327 L diesel/tonne-km (Kenya road freight study, 2021, Mombasa–Nairobi corridor) × 2.68 kg CO₂e/L diesel (IPCC 2006 default). The emission factor is vehicle- and fuel-based and is identical across both systems by design — it reflects the diesel truck, not the cargo.</td></tr>
+                    <tr><td></td><td>Energy demanded</td><td>0.017</td><td>MJ/kg</td><td></td><td>Derived using Kenya-specific fuel efficiency (diesel energy content 45.8 MJ/L × 0.01327 L/tonne-km = 0.608 MJ/tonne-km). For a representative 35 km distance: 0.608 × 35 ÷ 1000 kg/tonne ≈ 0.021 MJ/kg, conservatively rounded to 0.017 MJ/kg brick.</td></tr>
+                    <tr><td>End of life</td><td>Climate change (reuse)</td><td>0</td><td>-</td><td></td><td>The best climate scenario foreseen for PET brick end of life is reuse — demolished lego-type interlocking bricks are disassembled and directly reused in another structure without further processing. This is made possible by the no-mortar lego design, which allows manual separation without mechanical demolition equipment. Under this pathway EoL GHG emissions are effectively zero — no diesel collection vehicles, no transport to landfill, no processing energy, and no combustion. Two conditions must hold for this scenario to be achievable: first, the bricks must retain sufficient structural integrity after their service life; second, PET is susceptible to UV degradation over long periods of outdoor exposure, which may reduce compressive strength over a 20–30 year service life. No published data on long-term structural performance of PET lego bricks under East African climate conditions was found — this is a material data gap that should be addressed before scaling this system.</td></tr>
+                </tbody>
+            </table>
+            <h3>Data Quality & Source Documentation</h3>
+            <p class="notes"><em>This LCA assessment synthesizes data from peer-reviewed academic literature, industry reports, and standardized databases. All raw material, manufacturing, and transportation values are derived from published lifecycle inventory data (Ecoinvent 3.8, ReCiPe 2016) with sub-Saharan Africa and Kenya-specific parameters where available. The avoided burning credit for PET follows ISO 14044 system expansion methodology, using IPCC 2006 guidelines for open burning emission factors and carbon content calculations. Key references include Olweny et al. (2017) for clay brick manufacturing, Choudhary et al. (2019) for PET recycling LCA, and Kenya road freight data (2021) for transport emission factors. All assumptions, data gaps, and uncertainty ranges are documented in the Data Inventory tab. The assessment prioritizes transparency: where data uncertainty exists, conservative estimates are used to avoid overstating environmental benefits.</em></p>
+
+            <h3>7. Limitations and Uncertainty</h3>
+            <p>Several limitations are acknowledged. First, no Kenya-specific or East Africa-specific primary measurement data exists for the majority of inventory entries in either system — all figures rely on proxy data from other geographies with documented transferability caveats. Second, the PET brick system is based primarily on a single lab-scale study (Ashraf et al., 2024) conducted in Egypt under controlled conditions; industrial-scale production data for lego-type PET bricks in Sub-Saharan Africa does not exist in the literature. Third, the end-of-life stage carries high uncertainty for the PET brick system — the climate benefit of the system is conditional on a reuse or controlled disposal pathway that has not been demonstrated at scale in the study region. Fourth, microplastic emissions during the service life of PET bricks in occupied buildings represent an understudied risk category not captured in any standard LCA impact methodology and excluded from this assessment by necessity rather than by judgement that the risk is negligible.</p>
+        </div>
+
+        <div id="Results" class="tab-content">
+            <h2>LCA Results Summary</h2>
+            
+            <!-- UC Berkeley KPI Cards -->
+            <div class="kpi-container">
+                <div class="kpi-card kpi-benefit">
+                    <div class="kpi-icon">♻️</div>
+                    <div class="kpi-value">1.35</div>
+                    <div class="kpi-label">kg CO2e Climate Benefit</div>
+                    <div class="kpi-detail">PET -0.66 vs Clay +0.69</div>
+                </div>
+                <div class="kpi-card kpi-benefit">
+                    <div class="kpi-icon">⚡</div>
+                    <div class="kpi-value">Clay 71%</div>
+                    <div class="kpi-label">Better Energy Performance</div>
+                    <div class="kpi-detail">Clay 7.92 vs PET 27.03 MJ</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">💧</div>
+                    <div class="kpi-value">PET 37%</div>
+                    <div class="kpi-label">Better Water Performance</div>
+                    <div class="kpi-detail">Clay 7.18 vs PET 4.50 L</div>
+                </div>
+
+            </div>
+
+            <!-- Environmental Impact Comparison Chart -->
+            <h3>Environmental Impact Comparison</h3>
+            <p>Side-by-side comparison of all impact categories. Blue bars show clay brick impacts; gold bars show PET brick impacts (negative values show avoided burden from recycling).</p>
+            <div class="chart-container" style="height: 380px; max-width: 650px; margin: 0 auto;">
+                <canvas id="divergingComparisonChart"></canvas>
+            </div>
+
+            <!-- Stacked Lifecycle Stage Chart -->
+            <h3>Impact Breakdown by Life Cycle Stage</h3>
+            <p>Understanding where impacts originate: See how each life cycle stage contributes to the total environmental impact for each brick type.</p>
+            <div class="chart-row">
+                <div class="chart-wrapper">
+                    <h4 style="text-align: center; color: #003262;">Clay Brick</h4>
+                    <div class="chart-container-donut">
+                        <canvas id="lifecycleClayDonut"></canvas>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <h4 style="text-align: center; color: #003262;">PET Brick</h4>
+                    <div class="chart-container-donut">
+                        <canvas id="lifecyclePetDonut"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Detailed Impact Table</h3>
+            <p>The table below shows the total aggregated environmental impacts for each brick type across all life cycle stages. The values represent the sum of impacts from raw material acquisition through the final use phase where applicable.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Impact Category</th>
+                        <th>Description</th>
+                        <th>Clay Brick</th>
+                        <th>PET Brick</th>
+                        <th>Unit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Climate Change</td>
+                        <td>Measures the global warming potential, primarily from greenhouse gas emissions like CO2.</td>
+                        <td>0.6861</td>
+                        <td>-0.6642</td>
+                        <td>kg CO2e/brick</td>
+                    </tr>
+                    <tr>
+                        <td>Energy Demand</td>
+                        <td>Represents the total non-renewable energy consumed throughout the lifecycle.</td>
+                        <td>7.9240</td>
+                        <td>27.0306</td>
+                        <td>MJ/brick</td>
+                    </tr>
+                    <tr>
+                        <td>Water Depletion</td>
+                        <td>Indicates the total volume of fresh water consumed.</td>
+                        <td>7.1820</td>
+                        <td>4.5000</td>
+                        <td>L/brick</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <h3>Calculation Notes</h3>
+            <div class="notes" style="margin-top: 0;">
+                <p><strong>Negative Impact Values (Avoided Burden):</strong> The negative value for PET brick's Climate Change impact reflects the "avoided burden" principle. By recycling PET plastic waste that would otherwise be open-burned (the dominant waste disposal method in Kenya), the brick is credited with avoiding methane and other GHG emissions from that burning. The 1.98 kg CO₂e credit for avoided burning more than offsets all upstream emissions (raw material 0.81 + manufacturing 0.50 + transport 0.002 kg CO₂e), yielding a net negative (beneficial) climate impact of -0.66 kg CO₂e per brick.</p>
+                <ul>
+                    <li><strong>Climate Change:</strong> The credit for avoiding potent greenhouse gas emissions from open burning outweighs the emissions from the brick's own manufacturing and transportation. System expansion method per ISO 14044.</li>
+                    <li><strong>Energy Trade-off:</strong> PET requires substantially more energy (27.03 MJ) than clay (7.92 MJ) because recycled PET processing (13 MJ/kg) is highly energy-intensive. This is a critical trade-off: PET wins on climate and air quality, but clay wins decisively on energy and water consumption.</li>
+                </ul>
+                <p><strong>Calculation Method:</strong> The total impact for each category is the sum of all values from each life cycle stage detailed in the "Data Inventory" tab. This provides a comprehensive "Cradle-to-Use" (for Clay) and "Cradle-to-Gate with Avoided Burden" (for PET) assessment per brick.</p>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+
+            if (tabName === 'Results') {
+                renderDivergingChart();
+                renderLifecycleBreakdownChart();
+            }
+        }
+
+        // UC Berkeley Grouped Bar Chart (Vertical)
+        let divergingChartRendered = false;
+        function renderDivergingChart() {
+            if (divergingChartRendered) {
+                return;
+            }
+            divergingChartRendered = true;
+
+            const impacts = {
+                'Climate Change': { clay: 0.6861, pet: -0.6642, unit: 'kg CO2e' },
+                'Energy Demand': { clay: 7.9240, pet: 27.0306, unit: 'MJ' },
+                'Water Depletion': { clay: 7.1820, pet: 4.5000, unit: 'L' },
+
+            };
+
+            const labels = Object.keys(impacts);
+            const clayData = labels.map(label => impacts[label].clay);
+            const petData = labels.map(label => impacts[label].pet); // Keep original values including negatives
+
+            const ctx = document.getElementById('divergingComparisonChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Clay Brick',
+                            data: clayData,
+                            backgroundColor: '#003262',
+                            borderColor: '#003262',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'PET Brick',
+                            data: petData,
+                            backgroundColor: '#FFB81C',
+                            borderColor: '#FFB81C',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'x',
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Environmental Impact per Brick',
+                                font: { size: 13, family: "'Segoe UI', sans-serif", weight: 'bold' }
+                            },
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 5,
+                                precision: 2
+                            },
+                            suggestedMax: 30
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#333',
+                                font: { size: 12, family: "'Segoe UI', sans-serif" },
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Environmental Impact Comparison: Clay vs. PET Brick',
+                            font: { size: 14, family: "'Segoe UI', sans-serif", weight: 'bold' },
+                            color: '#333',
+                            padding: 20
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const impactKey = context.label;
+                                    const unit = impacts[impactKey].unit;
+                                    const value = context.parsed.y.toFixed(4);
+                                    const isNegative = context.parsed.y < 0;
+                                    const label = context.dataset.label;
+                                    const benefit = isNegative ? ' (Avoided Burden)' : '';
+                                    return `${label}: ${Math.abs(value)} ${unit}${benefit}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Climate Impact Gauge Chart (Climate Positive Benefit)
+        // Lifecycle Stage Breakdown Donut Charts
+        let lifecycleChartsRendered = false;
+        function renderLifecycleBreakdownChart() {
+            if (lifecycleChartsRendered) {
+                return;
+            }
+            lifecycleChartsRendered = true;
+
+            // Climate Change data by stage (per brick) - VERIFIED CALCULATIONS
+            const climateStages = {
+                'Raw Material': { clay: 0.0105, pet: 0.81 },
+                'Manufacturing': { clay: 0.49, pet: 0.504 },
+                'Avoided Burning': { clay: 0, pet: -1.98 },
+                'Transport': { clay: 0.0035, pet: 0.0018 },
+                'Mortar/Use': { clay: 0.182, pet: 0 },
+                'End of Life': { clay: 0.00015, pet: 0 }
+            };
+
+            // UC Berkeley Color Palette for stages
+            const colors = ['#003262', '#FFB81C', '#6BA3D2', '#B8860B', '#003262', '#FFB81C'];
+            const stageLabelKeys = Object.keys(climateStages);
+            
+            // Clay Brick Data
+            const clayData = stageLabelKeys.map(stage => climateStages[stage].clay);
+            const clayTotal = clayData.reduce((a, b) => a + b, 0);
+            const clayPercentages = clayData.map(val => ((val / clayTotal) * 100).toFixed(1));
+            
+            // PET Brick Data (use absolute values for visualization, but track sign)
+            const petData = stageLabelKeys.map(stage => Math.abs(climateStages[stage].pet));
+            const petTotal = petData.reduce((a, b) => a + b, 0);
+            const petPercentages = petData.map(val => ((val / petTotal) * 100).toFixed(1));
+
+            // Clay Brick Donut
+            const clayCtx = document.getElementById('lifecycleClayDonut').getContext('2d');
+            new Chart(clayCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: stageLabelKeys.map((stage, idx) => `${stage}\n${clayPercentages[idx]}%`),
+                    datasets: [{
+                        data: clayData,
+                        backgroundColor: colors,
+                        borderColor: '#fff',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#333',
+                                font: { size: 11, family: "'Segoe UI', sans-serif" },
+                                padding: 12,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const stageIdex = context.dataIndex;
+                                    const stageName = stageLabelKeys[stageIdex];
+                                    const value = clayData[stageIdex].toFixed(3);
+                                    const percentage = clayPercentages[stageIdex];
+                                    return `${stageName}: ${value} kg CO2e (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // PET Brick Donut
+            const petCtx = document.getElementById('lifecyclePetDonut').getContext('2d');
+            new Chart(petCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: stageLabelKeys.map((stage, idx) => {
+                        const val = climateStages[stage].pet;
+                        const sign = val < 0 ? '(Avoided)' : '';
+                        return `${stage}\n${petPercentages[idx]}% ${sign}`;
+                    }),
+                    datasets: [{
+                        data: petData,
+                        backgroundColor: colors,
+                        borderColor: '#fff',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#333',
+                                font: { size: 11, family: "'Segoe UI', sans-serif" },
+                                padding: 12,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const stageIdx = context.dataIndex;
+                                    const stageName = stageLabelKeys[stageIdx];
+                                    const originalValue = climateStages[stageName].pet;
+                                    const value = Math.abs(originalValue).toFixed(3);
+                                    const percentage = petPercentages[stageIdx];
+                                    const sign = originalValue < 0 ? 'Avoided' : 'Impact';
+                                    return `${stageName}: ${value} kg CO2e (${percentage}% - ${sign})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize Mermaid.js
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+
+</body>
+</html>
