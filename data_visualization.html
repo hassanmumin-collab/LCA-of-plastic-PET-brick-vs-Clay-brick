@@ -422,7 +422,7 @@ graph LR
             <!-- Environmental Impact Comparison Chart -->
             <h3>Environmental Impact Comparison</h3>
             <p>Side-by-side comparison of all impact categories. Blue bars show clay brick impacts; gold bars show PET brick impacts (negative values show avoided burden from recycling).</p>
-            <div class="chart-container" style="height: 420px;">
+            <div class="chart-container" style="height: 380px; max-width: 650px; margin: 0 auto;">
                 <canvas id="divergingComparisonChart"></canvas>
             </div>
 
@@ -572,7 +572,12 @@ graph LR
                                 text: 'Environmental Impact per Brick',
                                 font: { size: 13, family: "'Segoe UI', sans-serif", weight: 'bold' }
                             },
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 5,
+                                precision: 2
+                            },
+                            suggestedMax: 30
                         },
                         x: {
                             grid: { display: false }
