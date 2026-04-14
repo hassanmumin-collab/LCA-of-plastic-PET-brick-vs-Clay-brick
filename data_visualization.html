@@ -635,131 +635,97 @@ graph LR
             }
             climateGaugeRendered = true;
 
-            const ctx = document.getElementById('climateWaterfallChart').getContext('2d');
-            const benefitValue = 0.6642; // kg CO₂e avoided/net benefit
+            const canvas = document.getElementById('climateWaterfallChart');
+            const ctx = canvas.getContext('2d');
             
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Climate Benefit (Avoided)', 'Upstream Production'],
-                    datasets: [{
-                        data: [1.98, 1.312], // avoided burden vs upstream production
-                        backgroundColor: [
-                            '#2E7D32',  // Green - the benefit achieved
-                            '#FFC107'   // Amber - what was offset
-                        ],
-                        borderColor: ['#1B5E20', '#FFA000'],
-                        borderWidth: 2,
-                        circumference: 180,
-                        rotation: 270
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#333',
-                                font: { size: 12, family: "'Segoe UI', sans-serif" },
-                                padding: 20,
-                                usePointStyle: true
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.parsed + ' kg CO₂e';
-                                }
-                            },
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
-                            titleFont: { size: 12 },
-                            bodyFont: { size: 11 }
-                        }
-                    }
-                },
-                plugins: [
-                    {
-                        id: 'needlePointer',
-                        afterDatasetsDraw(chart) {
-                            const { ctx, chartArea: { left, top, width, height } } = chart;
-                            const centerX = left + width / 2;
-                            const centerY = top + height / 2;
-                            
-                            // Calculate needle angle: green is 60% of the gauge (1.98 out of 3.292)
-                            // Gauge spans 180 degrees from 270 to 90, so needle points to ~60% into that range
-                            const needleAngle = 270 + (180 * 0.60); // Points to green section
-                            const radians = (needleAngle * Math.PI) / 180;
-                            
-                            // Needle parameters
-                            const needleLength = Math.min(width, height) / 2.2;
-                            const needleWidth = 6;
-                            
-                            // Calculate end point of needle
-                            const endX = centerX + needleLength * Math.cos(radians);
-                            const endY = centerY + needleLength * Math.sin(radians);
-                            
-                            // Draw needle
-                            ctx.save();
-                            
-                            // Draw needle line
-                            ctx.strokeStyle = '#1B1B1B';
-                            ctx.lineWidth = needleWidth;
-                            ctx.lineCap = 'round';
-                            ctx.beginPath();
-                            ctx.moveTo(centerX, centerY);
-                            ctx.lineTo(endX, endY);
-                            ctx.stroke();
-                            
-                            // Draw center circle (needle pivot)
-                            ctx.fillStyle = '#1B1B1B';
-                            ctx.beginPath();
-                            ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
-                            ctx.fill();
-                            
-                            // Draw center circle border
-                            ctx.strokeStyle = '#fff';
-                            ctx.lineWidth = 2;
-                            ctx.beginPath();
-                            ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
-                            ctx.stroke();
-                            
-                            ctx.restore();
-                        }
-                    },
-                    {
-                        id: 'centerText',
-                        beforeDatasetsDraw(chart) {
-                            const { ctx, chartArea: { left, top, width, height } } = chart;
-                            ctx.save();
-
-                            const centerX = left + width / 2;
-                            const centerY = top + height / 2;
-
-                            // Title text
-                            ctx.font = 'bold 16px "Segoe UI", sans-serif';
-                            ctx.fillStyle = '#2E7D32';
-                            ctx.textAlign = 'center';
-                            ctx.fillText('CLIMATE', centerX, centerY - 15);
-                            ctx.fillText('POSITIVE', centerX, centerY + 5);
-
-                            // Benefit value
-                            ctx.font = 'bold 24px "Segoe UI", sans-serif';
-                            ctx.fillStyle = '#1B5E20';
-                            ctx.fillText('-0.66 kg CO₂e', centerX, centerY + 35);
-
-                            // Subtitle
-                            ctx.font = '11px "Segoe UI", sans-serif';
-                            ctx.fillStyle = '#666';
-                            ctx.fillText('Net Climate Benefit', centerX, centerY + 55);
-
-                            ctx.restore();
-                        }
-                    }
-                ]
-            });
+            // Get canvas dimensions
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height * 0.65; // Position gauge lower
+            const radius = Math.min(width, height) * 0.35;
+            
+            // Clear canvas
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw speedometer arc background (light gray)
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 30;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, Math.PI, 0, false);
+            ctx.stroke();
+            
+            // Draw green section (benefit: left 60%)
+            ctx.strokeStyle = '#2E7D32';
+            ctx.lineWidth = 30;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, Math.PI, Math.PI + (Math.PI * 0.60), false);
+            ctx.stroke();
+            
+            // Draw amber section (production: right 40%)
+            ctx.strokeStyle = '#FFC107';
+            ctx.lineWidth = 30;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, Math.PI + (Math.PI * 0.60), 0, false);
+            ctx.stroke();
+            
+            // Calculate needle angle (points to 60% position = into green)
+            const needleAngle = Math.PI + (Math.PI * 0.60);
+            const needleLength = radius - 20;
+            const needleEndX = centerX + needleLength * Math.cos(needleAngle);
+            const needleEndY = centerY + needleLength * Math.sin(needleAngle);
+            
+            // Draw needle
+            ctx.strokeStyle = '#1B1B1B';
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(needleEndX, needleEndY);
+            ctx.stroke();
+            
+            // Draw needle pivot circle
+            ctx.fillStyle = '#1B1B1B';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 10, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 10, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Draw side labels
+            ctx.font = 'bold 13px "Segoe UI", sans-serif';
+            ctx.fillStyle = '#2E7D32';
+            ctx.textAlign = 'right';
+            ctx.fillText('BENEFIT', centerX - radius - 20, centerY + 5);
+            
+            ctx.fillStyle = '#FFC107';
+            ctx.textAlign = 'left';
+            ctx.fillText('PRODUCTION', centerX + radius + 20, centerY + 5);
+            
+            // Draw values at min/max
+            ctx.font = '11px "Segoe UI", sans-serif';
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'center';
+            
+            // Left value (emissions)
+            ctx.fillText('1.31 kg CO₂e', centerX - radius * 0.55, centerY + 50);
+            // Right value (benefit)
+            ctx.fillText('1.98 kg CO₂e', centerX + radius * 0.55, centerY + 50);
+            
+            // Draw center value (net result)
+            ctx.font = 'bold 20px "Segoe UI", sans-serif';
+            ctx.fillStyle = '#2E7D32';
+            ctx.textAlign = 'center';
+            ctx.fillText('-0.66 kg CO₂e', centerX, height * 0.92);
+            
+            ctx.font = '12px "Segoe UI", sans-serif';
+            ctx.fillStyle = '#1B5E20';
+            ctx.fillText('NET CLIMATE BENEFIT', centerX, height * 0.98);
         }
 
         // Lifecycle Stage Breakdown Donut Charts
