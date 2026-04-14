@@ -331,9 +331,9 @@ graph LR
                 <ul>
                     <li><strong>Climate Change:</strong> PET brick delivers a net climate benefit of <strong>1.35 kg CO₂e saved per brick</strong> (197% net benefit). Clay brick emits <strong>+0.69 kg CO₂e/brick</strong> (raw material 0.01 + manufacturing 0.49 + transport 0.004 + mortar 0.18 + EOL 0.0002). PET brick emits <strong>-0.66 kg CO₂e/brick</strong> (raw material 0.81 + manufacturing 0.50 - avoided burning 1.98 + transport 0.002 + EOL 0). The dramatic benefit comes from diverting 1.8 kg of waste plastic from open burning, offsetting all upstream emissions.</li>
                     <li><strong>Energy Demand:</strong> Clay brick is significantly more energy-efficient at <strong>7.92 MJ per brick (71% better)</strong> versus <strong>27.03 MJ for PET</strong>. Clay breaks down as: raw material 0.09 + manufacturing 7.0 + transport 0.06 + mortar 0.77 MJ. PET breaks down as: raw material 23.4 + manufacturing 3.6 + transport 0.03 MJ. PET recycling (13 MJ/kg) is highly energy-intensive; even the lighter PET brick requires substantially more energy than clay manufacturing.</li>
-                    <li><strong>Water Depletion:</strong> Clay brick uses <strong>2.13 L per brick (53% better)</strong> versus <strong>4.50 L for PET</strong>. Clay water comes from manufacturing (2.02 L/brick for clay preparation and firing) plus mortar production (0.11 L). PET water (4.5 L) comes entirely from recycling facility washing and PET resin processing (2.5 L/kg × 1.8 kg).</li>
+                    <li><strong>Water Depletion:</strong> PET brick uses significantly less water at <strong>4.50 L per brick (37% better)</strong> versus <strong>7.18 L for clay</strong>. Clay water consumption is dominated by the manufacturing stage (2.02 L/kg × 3.5 kg = 7.07 L for clay preparation and firing) plus mortar production (0.032 L/kg × 3.5 kg = 0.112 L). PET water comes entirely from recycling facility washing and PET resin processing (2.5 L/kg × 1.8 kg = 4.5 L). In water-stressed regions, this is a significant advantage for PET bricks.</li>
                     <li><strong>Particulate Matter (PM₂.₅):</strong> Clay brick generates <strong>7.53 g PM₂.₅ per brick</strong> (raw material 0.53 + manufacturing 7.0 g from kiln firing), while PET generates <strong>0 g PM₂.₅</strong> (no air pollutant emissions tracked for PET production). Kiln firing is the dominant PM₂.₅ source and a recognized air quality concern in regions with existing pollution.</li>
-                    <li><strong>System Boundary Trade-offs:</strong> This analysis reveals a critical trade-off between climate and energy: PET excels in climate mitigation (avoided burning credits) and eliminates air pollution, but requires 71% more energy per brick. Clay is more energy-efficient and uses 53% less water, but generates significant kiln-based air pollution. The choice depends on local priorities (climate vs. energy vs. air quality vs. water availability) and cannot be answered with a single "better" product.</li>
+                    <li><strong>System Boundary Trade-offs:</strong> PET wins decisively on climate (saves 1.35 kg CO₂e per brick), water consumption (uses 37% less), and air quality (eliminates all 7.53 g PM₂.₅). However, clay brick is significantly more energy-efficient, using 71% less energy per brick (7.92 vs 27.03 MJ). The trade-off is clear: PET excels in climate, water, and air pollution; clay excels in energy efficiency. The choice depends on regional priorities (climate vulnerability vs. water scarcity vs. energy availability vs. air quality).</li>
                 </ul>
             </div>
         </div>
@@ -358,7 +358,7 @@ graph LR
                     <tr><td>Manufacturing</td><td>Climate change</td><td>0.14</td><td>kg CO₂e / kg</td><td>Kulkarni & Rao (2016)</td><td>Base case for a biomass-fired clamp kiln in Kenya, with the fraction of non-renewable biomass (fNRB) correction applied. fNRB is the proportion of wood fuel harvested beyond the landscape's natural regeneration rate and cannot be treated as carbon-neutral under ISO 14044. The UNFCCC TOOL30 global default of fNRB = 0.30 is applied as the single point estimate. The India biomass clamp kiln figure from Kumbhar et al. serves as the closest published analogue; after fNRB adjustment at 0.30 and inclusion of minor non-combustion process emissions, the Kenya base case is estimated at 0.14 kg CO₂e/kg brick.</td></tr>
                     <tr><td></td><td>Energy demand</td><td>2</td><td>MJ/kg</td><td></td><td>Global energy range in literature spans 0.5–5.0 MJ/kg depending on kiln type (clamp 0.5-2 MJ/kg, intermittent kiln 2-4 MJ/kg, tunnel kiln 3-5 MJ/kg). Kenya mainly uses clamp and intermittent kilns. Midpoint estimate of 2 MJ/kg is applied as single point for Kenya base case clamp kiln with typical biomass fuel inefficiency. This figure represents thermal energy only and excludes embodied energy in materials; it is cumulative across drying, preheating, and firing phases of the kiln cycle.</td></tr>
                     <tr><td></td><td>Particulate matter</td><td>2</td><td>g PM₂.₅ / kg</td><td></td><td>Particulate matter emissions during kiln firing come from two sources: (1) Fuel combustion PM2.5 from biomass burning in clamp kiln, typically 0.5–1.5 g PM2.5/kg fuel burned, and (2) Process emissions from clay degradation at high temperature (1000°C+), contributing secondary PM2.5. Combined estimate: ~2 g PM2.5/kg brick during manufacturing. This is substantially higher than raw material stage (0.15 g PM2.5/kg) because kiln firing generates much greater particulate emissions than clay pit operations. Unabated brick kilns are recognised air pollution sources in East Africa; dust control measures (wet scrubbers, baghouse filters) can reduce emissions by 50–90% but are rarely implemented in informal operations.</td></tr>
-                    <tr><td></td><td>Water depletion</td><td>2.02</td><td>L per brick</td><td>Skouteris et al., 2017</td><td>Water consumption during clay brick manufacturing for clay preparation, mixing, and cooling of fired bricks. The value of 2.02 L per brick is a fixed amount per brick (NOT per kg of brick), used directly in calculations without multiplication by brick weight. This value encompasses water used in clay slurry preparation plus additional water for spray-cooling and dust suppression during the drying phase. Skouteris et al. (Greece) provides the regional Mediterranean analogue for African manufacturing water intensity; this per-brick value is applied to all clay bricks regardless of weight.</td></tr>
+                    <tr><td></td><td>Water depletion</td><td>2.02</td><td>L/kg</td><td>Skouteris et al., 2017</td><td>Water consumption during clay brick manufacturing for clay preparation, mixing, and cooling of fired bricks. The 2.02 L/kg value is applied per kilogram of clay brick, so for a 3.5 kg brick: 2.02 × 3.5 = 7.07 L. This encompasses water used in clay slurry preparation plus additional water for spray-cooling and dust suppression during the drying phase. Skouteris et al. (Greece) provides the regional Mediterranean analogue for African manufacturing water intensity.</td></tr>
                     <tr><td>Transport to site</td><td>Climate change</td><td>0.001</td><td>kg CO₂e/kg/km</td><td></td><td>Derived using Kenya-specific road freight emission factor of 0.01327 L diesel/tonne-km (Kenya road freight study, 2021, Mombasa–Nairobi corridor) × 2.68 kg CO₂e/L diesel (IPCC 2006 default) = 0.0000356 kg CO₂e/kg/km, simplified to 0.000036 × d. A representative distance of 35 km is applied as the midpoint of the typical peri-urban Kenya range of 20–50 km, giving 0.000036 × 35 = 0.00126 kg CO₂e/kg brick, reported as ~0.001. Sensitivity range: 0.0007 kg CO₂e/kg at 20 km to 0.0018 kg CO₂e/kg at 50 km. This figure is negligible relative to Stage 3 manufacturing emissions and does not materially affect the lifecycle total. Site-specific distance should be substituted where known.</td></tr>
                     <tr><td></td><td>Energy demand</td><td>0.017</td><td>MJ / kg</td><td></td><td>Derived using the same Kenya-specific road freight energy factor proportional to the climate change calculation: 0.000036 × d × specific energy content of diesel.</td></tr>
                     <tr><td>User Phase - Mortar/cement binding</td><td>Climate change</td><td>0.052</td><td>kg CO₂e / kg</td><td></td><td>Derived in three steps. Step 1: Standard masonry calculation for 1:6 cement-sand mortar — 500 bricks per m³ of brickwork (standard brick 190 × 90 × 90 mm with 10 mm mortar joints); dry mortar volume = 0.306 m³/m³ brickwork; OPC content = 0.306 × (1/7) × 1,440 kg/m³ = 63 kg OPC/m³ brickwork, confirmed across multiple civil engineering reference sources. Step 2: 63 kg OPC ÷ 1,000 kg brick (500 bricks × 2 kg/brick per m³) = 0.063 kg OPC per kg brick. Step 3: OPC emission factor = 0.83 kg CO₂e/kg cement (University of Bath ICE v3.0). Result: 0.063 × 0.83 = 0.052 kg CO₂e/kg brick.</td></tr>
@@ -414,11 +414,11 @@ graph LR
                     <div class="kpi-label">Better Energy Performance</div>
                     <div class="kpi-detail">Clay 7.92 vs PET 27.03 MJ</div>
                 </div>
-                <div class="kpi-card kpi-benefit">
+                <div class="kpi-card">
                     <div class="kpi-icon">💧</div>
-                    <div class="kpi-value">Clay 53%</div>
+                    <div class="kpi-value">PET 37%</div>
                     <div class="kpi-label">Better Water Performance</div>
-                    <div class="kpi-detail">Clay 2.13 vs PET 4.50 L</div>
+                    <div class="kpi-detail">Clay 7.18 vs PET 4.50 L</div>
                 </div>
                 <div class="kpi-card kpi-benefit">
                     <div class="kpi-icon">💨</div>
@@ -483,7 +483,7 @@ graph LR
                     <tr>
                         <td>Water Depletion</td>
                         <td>Indicates the total volume of fresh water consumed.</td>
-                        <td>2.1320</td>
+                        <td>7.1820</td>
                         <td>4.5000</td>
                         <td>L/brick</td>
                     </tr>
@@ -544,7 +544,7 @@ graph LR
             const impacts = {
                 'Climate Change': { clay: 0.6861, pet: -0.6642, unit: 'kg CO2e' },
                 'Energy Demand': { clay: 7.9240, pet: 27.0306, unit: 'MJ' },
-                'Water Depletion': { clay: 2.1320, pet: 4.5000, unit: 'L' },
+                'Water Depletion': { clay: 7.1820, pet: 4.5000, unit: 'L' },
                 'Particulate Matter': { clay: 7.5250, pet: 0, unit: 'g PM2.5' }
             };
 
