@@ -429,7 +429,7 @@ graph LR
             <!-- Climate Impact Gauge (Avoided Burden Benefit) -->
             <h3>PET Net Climate Impact - Avoided Burning Creates Climate Positive Result</h3>
             <p>PET brick production creates 1.31 kg CO₂e in upstream emissions (raw material, manufacturing, transport). However, diverting 1.8 kg of waste PET from open burning in Kenya/Somalia avoids 1.98 kg CO₂e, resulting in a net <strong>climate benefit of 0.66 kg CO₂e per brick</strong>. The avoided burden credit more than offsets all production impacts.</p>
-            <div class="chart-container" style="height: 350px; max-width: 500px; margin: 0 auto;">
+            <div class="chart-container" style="height: 320px; max-width: 380px; margin: 0 auto;">
                 <canvas id="climateWaterfallChart"></canvas>
             </div>
 
@@ -681,6 +681,54 @@ graph LR
                     }
                 },
                 plugins: [
+                    {
+                        id: 'needlePointer',
+                        afterDatasetsDraw(chart) {
+                            const { ctx, chartArea: { left, top, width, height } } = chart;
+                            const centerX = left + width / 2;
+                            const centerY = top + height / 2;
+                            
+                            // Calculate needle angle: green is 60% of the gauge (1.98 out of 3.292)
+                            // Gauge spans 180 degrees from 270 to 90, so needle points to ~60% into that range
+                            const needleAngle = 270 + (180 * 0.60); // Points to green section
+                            const radians = (needleAngle * Math.PI) / 180;
+                            
+                            // Needle parameters
+                            const needleLength = Math.min(width, height) / 2.2;
+                            const needleWidth = 6;
+                            
+                            // Calculate end point of needle
+                            const endX = centerX + needleLength * Math.cos(radians);
+                            const endY = centerY + needleLength * Math.sin(radians);
+                            
+                            // Draw needle
+                            ctx.save();
+                            
+                            // Draw needle line
+                            ctx.strokeStyle = '#1B1B1B';
+                            ctx.lineWidth = needleWidth;
+                            ctx.lineCap = 'round';
+                            ctx.beginPath();
+                            ctx.moveTo(centerX, centerY);
+                            ctx.lineTo(endX, endY);
+                            ctx.stroke();
+                            
+                            // Draw center circle (needle pivot)
+                            ctx.fillStyle = '#1B1B1B';
+                            ctx.beginPath();
+                            ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+                            ctx.fill();
+                            
+                            // Draw center circle border
+                            ctx.strokeStyle = '#fff';
+                            ctx.lineWidth = 2;
+                            ctx.beginPath();
+                            ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+                            ctx.stroke();
+                            
+                            ctx.restore();
+                        }
+                    },
                     {
                         id: 'centerText',
                         beforeDatasetsDraw(chart) {
