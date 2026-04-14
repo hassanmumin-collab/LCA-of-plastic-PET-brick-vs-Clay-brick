@@ -427,10 +427,10 @@ graph LR
                 <canvas id="divergingComparisonChart"></canvas>
             </div>
 
-            <!-- Climate Impact Breakdown (Avoided Burden Waterfall) -->
-            <h3>PET Climate Impact Breakdown - How Avoided Burning Offsets Emissions</h3>
-            <p>Waterfall view showing how each lifecycle stage contributes to PET's net climate benefit. The avoided burning credit (-1.98 kg CO₂e) more than offsets all upstream production emissions, resulting in a net -0.66 kg CO₂e benefit.</p>
-            <div class="chart-container" style="height: 380px; max-width: 700px; margin: 0 auto;">
+            <!-- Climate Impact Gauge (Avoided Burden Benefit) -->
+            <h3>PET Net Climate Impact - Avoided Burning Creates Climate Positive Result</h3>
+            <p>PET brick production creates 1.31 kg CO₂e in upstream emissions (raw material, manufacturing, transport). However, diverting 1.8 kg of waste PET from open burning in Kenya/Somalia avoids 1.98 kg CO₂e, resulting in a net <strong>climate benefit of 0.66 kg CO₂e per brick</strong>. The avoided burden credit more than offsets all production impacts.</p>
+            <div class="chart-container" style="height: 350px; max-width: 500px; margin: 0 auto;">
                 <canvas id="climateWaterfallChart"></canvas>
             </div>
 
@@ -525,7 +525,7 @@ graph LR
 
             if (tabName === 'Results') {
                 renderDivergingChart();
-                renderClimateWaterfallChart();
+                renderClimateGaugeChart();
                 renderLifecycleBreakdownChart();
             }
         }
@@ -631,91 +631,50 @@ graph LR
             });
         }
 
-        // Climate Impact Waterfall Chart (Avoided Burden Visualization)
-        let climateWaterfallRendered = false;
-        function renderClimateWaterfallChart() {
-            if (climateWaterfallRendered) {
+        // Climate Impact Gauge Chart (Climate Positive Benefit)
+        let climateGaugeRendered = false;
+        function renderClimateGaugeChart() {
+            if (climateGaugeRendered) {
                 return;
             }
-            climateWaterfallRendered = true;
+            climateGaugeRendered = true;
 
             const ctx = document.getElementById('climateWaterfallChart').getContext('2d');
+            const benefitValue = 0.6642; // kg CO₂e avoided/net benefit
+            
             new Chart(ctx, {
-                type: 'bar',
+                type: 'doughnut',
                 data: {
-                    labels: ['Raw Material', 'Manufacturing', 'Transport', 'Avoided Burning\n(Open Burn Diversion)', 'Total Climate\nBenefit'],
-                    datasets: [
-                        {
-                            label: 'PET Brick Climate Impact by Stage',
-                            data: [0.81, 0.504, 0.0018, -1.98, -0.6642],
-                            backgroundColor: [
-                                '#FFB81C',  // Raw material (gold)
-                                '#FFB81C',  // Manufacturing (gold)
-                                '#FFB81C',  // Transport (gold)
-                                '#2E7D32',  // Avoided burning (green - benefit)
-                                '#1976D2'   // Total (blue - net benefit)
-                            ],
-                            borderColor: ['#F79646', '#F79646', '#F79646', '#1B5E20', '#0D47A1'],
-                            borderWidth: 2,
-                            borderRadius: 4
-                        }
-                    ]
+                    labels: ['Climate Benefit (Avoided)', 'Upstream Production'],
+                    datasets: [{
+                        data: [1.98, 1.312], // avoided burden vs upstream production
+                        backgroundColor: [
+                            '#2E7D32',  // Green - the benefit achieved
+                            '#FFC107'   // Amber - what was offset
+                        ],
+                        borderColor: ['#1B5E20', '#FFA000'],
+                        borderWidth: 2,
+                        circumference: 180,
+                        rotation: 270
+                    }]
                 },
                 options: {
-                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'kg CO₂e per Brick',
-                                font: { size: 12, family: "'Segoe UI', sans-serif", weight: 'bold' }
-                            },
-                            ticks: {
-                                stepSize: 0.5
-                            },
-                            min: -2.5,
-                            max: 1.5,
-                            grid: {
-                                drawBorder: true,
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            }
-                        },
-                        y: {
-                            grid: { display: false }
-                        }
-                    },
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top',
+                            position: 'bottom',
                             labels: {
                                 color: '#333',
                                 font: { size: 12, family: "'Segoe UI', sans-serif" },
-                                padding: 15,
+                                padding: 20,
                                 usePointStyle: true
                             }
-                        },
-                        title: {
-                            display: true,
-                            text: 'PET Climate Impact Breakdown: How Avoided Burning Creates Net Climate Benefit',
-                            font: { size: 12, family: "'Segoe UI', sans-serif", weight: 'bold' },
-                            color: '#333',
-                            padding: 15
                         },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    const value = context.parsed.x.toFixed(4);
-                                    const isNegative = context.parsed.x < 0;
-                                    const benefit = isNegative ? ' (Climate Benefit)' : ' (Emissions)';
-                                    return `${context.dataset.label.split(' ')[0]}: ${Math.abs(value)} kg CO₂e${benefit}`;
-                                },
-                                afterLabel: function(context) {
-                                    if (context.dataIndex === 3) {
-                                        return 'Diverts 1.8 kg waste PET from\nopen burning in Kenya/Somalia';
-                                    }
+                                    return context.label + ': ' + context.parsed + ' kg CO₂e';
                                 }
                             },
                             backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -725,25 +684,50 @@ graph LR
                         },
                         datalabels: {
                             display: true,
-                            align: 'end',
-                            anchor: 'end',
-                            color: '#333',
+                            color: '#fff',
                             font: {
-                                size: 11,
+                                size: 13,
                                 weight: 'bold',
                                 family: "'Segoe UI', sans-serif"
                             },
                             formatter: function(value, context) {
-                                if (value === 0) return '';
-                                return Math.abs(value).toFixed(4) + ' kg CO₂e';
+                                return value.toFixed(2) + '\nkg CO₂e';
                             },
-                            offset: 8,
-                            padding: 4,
-                            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                            borderRadius: 3
+                            textAlign: 'center'
                         }
                     }
-                }
+                },
+                plugins: [
+                    {
+                        id: 'centerText',
+                        beforeDatasetsDraw(chart) {
+                            const { ctx, chartArea: { left, top, width, height } } = chart;
+                            ctx.save();
+
+                            const centerX = left + width / 2;
+                            const centerY = top + height / 2;
+
+                            // Title text
+                            ctx.font = 'bold 16px "Segoe UI", sans-serif';
+                            ctx.fillStyle = '#2E7D32';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('CLIMATE', centerX, centerY - 15);
+                            ctx.fillText('POSITIVE', centerX, centerY + 5);
+
+                            // Benefit value
+                            ctx.font = 'bold 24px "Segoe UI", sans-serif';
+                            ctx.fillStyle = '#1B5E20';
+                            ctx.fillText('-0.66 kg CO₂e', centerX, centerY + 35);
+
+                            // Subtitle
+                            ctx.font = '11px "Segoe UI", sans-serif';
+                            ctx.fillStyle = '#666';
+                            ctx.fillText('Net Climate Benefit', centerX, centerY + 55);
+
+                            ctx.restore();
+                        }
+                    }
+                ]
             });
         }
 
