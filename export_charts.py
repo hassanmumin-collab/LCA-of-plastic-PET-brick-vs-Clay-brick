@@ -19,17 +19,17 @@ WAIT_TIME = 3000  # 3 seconds for charts to fully render
 # Chart configurations with their DOM selectors
 CHARTS_TO_EXPORT = {
     "01_Environmental_Impact_Comparison": {
-        "selector": "#divergingChart",
+        "selector": "#divergingComparisonChart",
         "delay": 2000,
         "description": "Environmental Impact Comparison (Climate, Energy, Water)"
     },
     "02_Clay_Brick_Lifecycle": {
-        "selector": "#clayLifecycleChart",
+        "selector": "#lifecycleClayDonut",
         "delay": 2000,
         "description": "Clay Brick Lifecycle Stage Breakdown"
     },
     "03_PET_Brick_Lifecycle": {
-        "selector": "#petLifecycleChart",
+        "selector": "#lifecyclePetDonut",
         "delay": 2000,
         "description": "PET Brick Lifecycle Stage Breakdown"
     },
@@ -60,54 +60,84 @@ FULL_PAGE_EXPORTS = {
 
 
 async def export_individual_charts(page):
-    """Export individual charts as PNG files."""
+    """Export individual charts as PNG files - navigate to Results tab and take cropped screenshots."""
     print("\n📊 EXPORTING INDIVIDUAL CHARTS")
     print("=" * 60)
     
-    # Ensure Results tab is active
-    await page.click("button.tab-button:nth-of-type(3)")
-    await page.wait_for_timeout(1500)
+    # Export System Boundaries from Executive Summary
+    try:
+        print(f"\n📈 Exporting: System Boundaries and Scope Definition")
+        await page.click("button.tab-button:nth-of-type(1)")
+        await page.wait_for_timeout(2000)
+        
+        filepath = EXPORT_DIR / "04_System_Boundaries_Flowchart.png"
+        await page.screenshot(path=str(filepath))
+        file_size = os.path.getsize(filepath) / 1024
+        print(f"   ✅ Saved: 04_System_Boundaries_Flowchart.png ({file_size:.1f} KB)")
+    except Exception as e:
+        print(f"   ❌ Error: {str(e)}")
     
-    for filename, config in CHARTS_TO_EXPORT.items():
-        try:
-            selector = config["selector"]
-            delay = config["delay"]
-            description = config["description"]
-            
-            print(f"\n📈 Exporting: {description}")
-            print(f"   Selector: {selector}")
-            
-            # Wait for element and additional render time
-            await page.wait_for_selector(selector, timeout=10000)
-            await page.wait_for_timeout(delay)
-            
-            # Get element bounding box
-            element = await page.query_selector(selector)
-            if not element:
-                print(f"   ❌ Element not found: {selector}")
-                continue
-            
+    # Go to Results tab for chart exports
+    await page.click("button.tab-button:nth-of-type(3)")
+    await page.wait_for_timeout(2000)
+    
+    # Export Environmental Impact Comparison Chart
+    try:
+        print(f"\n📈 Exporting: Environmental Impact Comparison Chart")
+        element = await page.query_selector("#divergingComparisonChart")
+        if element:
             box = await element.bounding_box()
-            if not box:
-                print(f"   ❌ Could not get bounding box")
-                continue
+            if box:
+                # Get parent container for better framing
+                parent = await element.evaluate_handle("el => el.parentElement")
+                parent_box = await parent.evaluate("el => el.getBoundingClientRect()")
+                box = {
+                    "x": max(0, parent_box.get("x", 0) - 10),
+                    "y": max(0, parent_box.get("y", 0) - 10),
+                    "width": parent_box.get("width", 800) + 20,
+                    "height": parent_box.get("height", 500) + 20
+                }
+                
+                filepath = EXPORT_DIR / "01_Environmental_Impact_Comparison.png"
+                await page.screenshot(path=str(filepath), clip=box)
+                file_size = os.path.getsize(filepath) / 1024
+                print(f"   ✅ Saved: 01_Environmental_Impact_Comparison.png ({file_size:.1f} KB)")
+    except Exception as e:
+        print(f"   ❌ Error: {str(e)}")
+    
+    # Export Clay Lifecycle Breakdown Chart
+    try:
+        print(f"\n📈 Exporting: Clay Brick Lifecycle Breakdown")
+        element = await page.query_selector("#lifecycleClayDonut")
+        if element:
+            # Scroll element into view
+            await element.scroll_into_view_if_needed()
+            await page.wait_for_timeout(1000)
             
-            # Add padding for better composition
-            box["x"] = max(0, box["x"] - 20)
-            box["y"] = max(0, box["y"] - 20)
-            box["width"] = box["width"] + 40
-            box["height"] = box["height"] + 40
+            # Take full screenshot of viewport to capture the element
+            filepath = EXPORT_DIR / "02_Clay_Brick_Lifecycle.png"
+            await page.screenshot(path=str(filepath))
+            file_size = os.path.getsize(filepath) / 1024
+            print(f"   ✅ Saved: 02_Clay_Brick_Lifecycle.png ({file_size:.1f} KB)")
+    except Exception as e:
+        print(f"   ❌ Error: {str(e)}")
+    
+    # Export PET Lifecycle Breakdown Chart
+    try:
+        print(f"\n📈 Exporting: PET Brick Lifecycle Breakdown")
+        element = await page.query_selector("#lifecyclePetDonut")
+        if element:
+            # Scroll element into view
+            await element.scroll_into_view_if_needed()
+            await page.wait_for_timeout(1000)
             
-            # Take screenshot
-            filepath = EXPORT_DIR / f"{filename}.png"
-            await page.screenshot(path=str(filepath), clip=box)
-            
-            file_size = os.path.getsize(filepath) / 1024  # KB
-            print(f"   ✅ Saved: {filename}.png ({file_size:.1f} KB)")
-            
-        except Exception as e:
-            print(f"   ❌ Error: {str(e)}")
-            continue
+            # Take full screenshot of viewport to capture the element
+            filepath = EXPORT_DIR / "03_PET_Brick_Lifecycle.png"
+            await page.screenshot(path=str(filepath))
+            file_size = os.path.getsize(filepath) / 1024
+            print(f"   ✅ Saved: 03_PET_Brick_Lifecycle.png ({file_size:.1f} KB)")
+    except Exception as e:
+        print(f"   ❌ Error: {str(e)}")
 
 
 async def export_full_pages(page):
