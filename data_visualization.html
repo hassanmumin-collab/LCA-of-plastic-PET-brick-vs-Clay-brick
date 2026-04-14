@@ -426,6 +426,13 @@ graph LR
                 <canvas id="divergingComparisonChart"></canvas>
             </div>
 
+            <!-- Climate Impact Breakdown (Avoided Burden Waterfall) -->
+            <h3>PET Climate Impact Breakdown - How Avoided Burning Offsets Emissions</h3>
+            <p>Waterfall view showing how each lifecycle stage contributes to PET's net climate benefit. The avoided burning credit (-1.98 kg CO₂e) more than offsets all upstream production emissions, resulting in a net -0.66 kg CO₂e benefit.</p>
+            <div class="chart-container" style="height: 380px; max-width: 700px; margin: 0 auto;">
+                <canvas id="climateWaterfallChart"></canvas>
+            </div>
+
             <!-- Stacked Lifecycle Stage Chart -->
             <h3>Impact Breakdown by Life Cycle Stage</h3>
             <p>Understanding where impacts originate: See how each life cycle stage contributes to the total environmental impact for each brick type.</p>
@@ -514,6 +521,7 @@ graph LR
 
             if (tabName === 'Results') {
                 renderDivergingChart();
+                renderClimateWaterfallChart();
                 renderLifecycleBreakdownChart();
             }
         }
@@ -613,6 +621,103 @@ graph LR
                                     return `${label}: ${Math.abs(value)} ${unit}${benefit}`;
                                 }
                             }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Climate Impact Waterfall Chart (Avoided Burden Visualization)
+        let climateWaterfallRendered = false;
+        function renderClimateWaterfallChart() {
+            if (climateWaterfallRendered) {
+                return;
+            }
+            climateWaterfallRendered = true;
+
+            const ctx = document.getElementById('climateWaterfallChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Raw Material', 'Manufacturing', 'Transport', 'Avoided Burning\n(Open Burn Diversion)', 'Total Climate\nBenefit'],
+                    datasets: [
+                        {
+                            label: 'PET Brick Climate Impact by Stage',
+                            data: [0.81, 0.504, 0.0018, -1.98, -0.6642],
+                            backgroundColor: [
+                                '#FFB81C',  // Raw material (gold)
+                                '#FFB81C',  // Manufacturing (gold)
+                                '#FFB81C',  // Transport (gold)
+                                '#2E7D32',  // Avoided burning (green - benefit)
+                                '#1976D2'   // Total (blue - net benefit)
+                            ],
+                            borderColor: ['#F79646', '#F79646', '#F79646', '#1B5E20', '#0D47A1'],
+                            borderWidth: 2,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'kg CO₂e per Brick',
+                                font: { size: 12, family: "'Segoe UI', sans-serif", weight: 'bold' }
+                            },
+                            ticks: {
+                                stepSize: 0.5
+                            },
+                            min: -2.5,
+                            max: 1.5,
+                            grid: {
+                                drawBorder: true,
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#333',
+                                font: { size: 12, family: "'Segoe UI', sans-serif" },
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'PET Climate Impact Breakdown: How Avoided Burning Creates Net Climate Benefit',
+                            font: { size: 12, family: "'Segoe UI', sans-serif", weight: 'bold' },
+                            color: '#333',
+                            padding: 15
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed.x.toFixed(4);
+                                    const isNegative = context.parsed.x < 0;
+                                    const benefit = isNegative ? ' (Climate Benefit)' : ' (Emissions)';
+                                    return `${context.dataset.label.split(' ')[0]}: ${Math.abs(value)} kg CO₂e${benefit}`;
+                                },
+                                afterLabel: function(context) {
+                                    if (context.dataIndex === 3) {
+                                        return 'Diverts 1.8 kg waste PET from\nopen burning in Kenya/Somalia';
+                                    }
+                                }
+                            },
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: { size: 12 },
+                            bodyFont: { size: 11 }
                         }
                     }
                 }
