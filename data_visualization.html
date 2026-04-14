@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LCA Data Visualization</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         body {
@@ -223,6 +224,45 @@
             width: 58%;
             min-width: 550px;
         }
+        
+        /* Export Controls */
+        .export-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .export-btn {
+            padding: 10px 20px;
+            background: #003262;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,50,98,0.2);
+        }
+        .export-btn:hover {
+            background: #001d3d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,50,98,0.3);
+        }
+        .export-btn:active {
+            transform: translateY(0);
+        }
+        .export-status {
+            text-align: center;
+            color: #27ae60;
+            font-size: 12px;
+            margin: 5px 0;
+            display: none;
+        }
+        .export-status.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -392,6 +432,14 @@ graph LR
 
         <div id="Results" class="tab-content">
             <h2>LCA Results Summary</h2>
+            
+            <!-- Export Controls for PowerPoint -->
+            <div class="export-controls">
+                <button class="export-btn" onclick="exportChart('divergingChart', 'Environmental_Impact_Comparison')">📊 Export Impact Chart (PNG)</button>
+                <button class="export-btn" onclick="exportChart('clayLifecycleChart', 'Clay_Lifecycle')">🧱 Export Clay Lifecycle (PNG)</button>
+                <button class="export-btn" onclick="exportChart('petLifecycleChart', 'PET_Lifecycle')">♻️ Export PET Lifecycle (PNG)</button>
+            </div>
+            <div class="export-status" id="exportStatus">✅ Chart exported successfully!</div>
             
             <!-- UC Berkeley KPI Cards -->
             <div class="kpi-container">
@@ -735,6 +783,41 @@ graph LR
                     }
                 }
             });
+        }
+
+        // Export Charts to PNG for PowerPoint
+        async function exportChart(chartId, fileName) {
+            const statusEl = document.getElementById('exportStatus');
+            try {
+                const element = document.getElementById(chartId);
+                if (!element) {
+                    alert(`Chart "${chartId}" not found. Please ensure you're on the Results tab.`);
+                    return;
+                }
+                
+                // Use html2canvas to export
+                const canvas = await html2canvas(element, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    logging: false
+                });
+                
+                // Create download link
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `LCA_${fileName}_${new Date().toISOString().slice(0,10)}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Show success message
+                statusEl.classList.add('active');
+                setTimeout(() => statusEl.classList.remove('active'), 3000);
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                alert('Error exporting chart: ' + error.message);
+            }
         }
 
         // Initialize Mermaid.js
