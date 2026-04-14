@@ -469,47 +469,41 @@ graph LR
                     <tr>
                         <td>Climate Change</td>
                         <td>Measures the global warming potential, primarily from greenhouse gas emissions like CO2.</td>
-                        <td>1.3944</td>
-                        <td>-5.3402</td>
+                        <td>0.6861</td>
+                        <td>-0.6642</td>
                         <td>kg CO2e/brick</td>
                     </tr>
                     <tr>
                         <td>Energy Demand</td>
                         <td>Represents the total non-renewable energy consumed throughout the lifecycle.</td>
-                        <td>14.2100</td>
-                        <td>3.9648</td>
+                        <td>7.9240</td>
+                        <td>27.0306</td>
                         <td>MJ/brick</td>
                     </tr>
                     <tr>
                         <td>Water Depletion</td>
                         <td>Indicates the total volume of fresh water consumed.</td>
-                        <td>4.2840</td>
-                        <td>1.1200</td>
+                        <td>2.1320</td>
+                        <td>4.5000</td>
                         <td>L/brick</td>
                     </tr>
                     <tr>
                         <td>Particulate Matter</td>
                         <td>Measures the emission of fine particles that can harm human health and the environment.</td>
-                        <td>2.3296</td>
-                        <td>-3.3443</td>
+                        <td>7.5250</td>
+                        <td>0</td>
                         <td>g PM2.5/brick</td>
-                    </tr>
-                    <tr>
-                        <td>Land Use</td>
-                        <td>Represents the area of land occupied or transformed over time.</td>
-                        <td>0.0050</td>
-                        <td>-0.0034</td>
-                        <td>m²a/brick</td>
                     </tr>
                 </tbody>
             </table>
 
             <h3>Calculation Notes</h3>
             <div class="notes" style="margin-top: 0;">
-                <p><strong>Negative Impact Values (Avoided Burden):</strong> The significant negative values for the PET brick's Climate Change, Particulate Matter, and Land Use impacts are due to the "avoided burden" principle. By recycling PET plastic waste that would otherwise end up in a landfill or uncontrolled dump, the brick is credited with avoiding the environmental impacts that waste would have caused. For example:</p>
+                <p><strong>Negative Impact Values (Avoided Burden):</strong> The negative value for PET brick's Climate Change impact reflects the "avoided burden" principle. By recycling PET plastic waste that would otherwise be open-burned (the dominant waste disposal method in Kenya), the brick is credited with avoiding methane and other GHG emissions from that burning. The 1.98 kg CO₂e credit for avoided burning more than offsets all upstream emissions (raw material 0.81 + manufacturing 0.50 + transport 0.002 kg CO₂e), yielding a net negative (beneficial) climate impact of -0.66 kg CO₂e per brick.</p>
                 <ul>
-                    <li><strong>Climate Change:</strong> The credit for avoiding potent greenhouse gas emissions (like methane from landfill decomposition) outweighs the emissions from the brick's own manufacturing and transportation.</li>
-                    <li><strong>Particulate Matter & Land Use:</strong> Similarly, the brick is credited for preventing pollution and land use associated with waste disposal sites.</li>
+                    <li><strong>Climate Change:</strong> The credit for avoiding potent greenhouse gas emissions from open burning outweighs the emissions from the brick's own manufacturing and transportation. System expansion method per ISO 14044.</li>
+                    <li><strong>Particulate Matter:</strong> PET production generates no PM₂.₅ according to available data, while clay kiln firing is a significant particulate source (7.53 g PM₂.₅/brick, primarily from kiln combustion).</li>
+                    <li><strong>Energy Trade-off:</strong> PET requires substantially more energy (27.03 MJ) than clay (7.92 MJ) because recycled PET processing (13 MJ/kg) is highly energy-intensive. This is a critical trade-off: PET wins on climate and air quality, but clay wins decisively on energy and water consumption.</li>
                 </ul>
                 <p><strong>Calculation Method:</strong> The total impact for each category is the sum of all values from each life cycle stage detailed in the "Data Inventory" tab. This provides a comprehensive "Cradle-to-Use" (for Clay) and "Cradle-to-Gate with Avoided Burden" (for PET) assessment per brick.</p>
             </div>
