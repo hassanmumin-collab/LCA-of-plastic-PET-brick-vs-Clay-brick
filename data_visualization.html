@@ -294,8 +294,8 @@ graph LR
                 
                 <p><strong>Brick Specifications:</strong></p>
                 <ul>
-                    <li><strong>Clay Brick:</strong> 2.8 kg per brick (dimensions 19×19×13.5 cm). Source: Yüksek & Öztaş (2020) study of fired clay brick production in Turkey, representing standard masonry units used in East African construction.</li>
-                    <li><strong>PET Plastic Brick:</strong> 2.24 kg per brick (approximately 20% lighter than clay brick). The lighter weight reflects the density difference between plastic materials (1.2–1.4 g/cm³) and fired clay (1.8+ g/cm³), while maintaining similar functional dimensions.</li>
+                    <li><strong>Clay Brick:</strong> 3.5 kg per brick (dimensions 19×19×13.5 cm). Standard masonry unit used in East African construction with typical void ratio.</li>
+                    <li><strong>PET Plastic Brick:</strong> 1.8 kg per brick (approximately 49% lighter than clay brick). The significantly lower weight reflects the density difference between plastic materials (1.2–1.4 g/cm³) and fired clay (1.8+ g/cm³), while maintaining similar functional dimensions for interlocking lego-type assembly.</li>
                 </ul>
                 
                 <p><strong>Life Cycle Assessment Approach:</strong></p>
@@ -327,12 +327,13 @@ graph LR
             </div>
 
             <div class="summary-section">
-                <h3>Key Findings</h3>
+                <h3>Key Findings - Detailed Results per Brick</h3>
                 <ul>
-                    <li><strong>Climate Change:</strong> The PET brick delivers a substantial net climate benefit of <strong>6.73 kg CO2e saved per brick</strong> compared to clay. The PET brick achieves <strong>-5.34 kg CO2e/brick</strong> (avoided burden from landfill diversion), while the clay brick emits <strong>1.39 kg CO2e/brick</strong>. This dramatic difference stems from the avoided methane emissions that would result from landfilling waste plastic.</li>
-                    <li><strong>Energy Demand:</strong> The PET brick requires <strong>3.96 MJ per brick</strong> versus <strong>14.21 MJ for clay</strong>—a <strong>72% energy reduction</strong>. Clay brick manufacturing is dominated by high-temperature kiln firing, which is inherently energy-intensive. PET brick processing uses electrical molding at lower temperatures, resulting in substantially lower cumulative energy demand.</li>
-                    <li><strong>Particulate Matter:</strong> The PET brick avoids <strong>5.67 g PM2.5 per brick</strong> compared to clay. PET achieves <strong>-3.34 g PM2.5/brick</strong> (avoided from landfill decomposition), while clay emits <strong>2.33 g PM2.5/brick</strong>. This is particularly significant for air quality and public health, especially in regions with existing air pollution challenges.</li>
-                    <li><strong>Water & Land Use:</strong> The PET brick reduces water consumption by <strong>74%</strong> (1.12 L vs. 4.28 L per brick), primarily because clay brick manufacturing requires extensive water for clay processing and mortar production. Land use similarly favors PET, with the brick providing a net benefit of <strong>-0.0034 m²a/brick</strong> (avoided land impact from landfill diversion) versus clay's <strong>0.005 m²a/brick</strong>.</li>
+                    <li><strong>Climate Change:</strong> PET brick delivers a net climate benefit of <strong>1.35 kg CO2e saved per brick</strong> compared to clay (69% reduction). Clay brick: 0.69 kg CO2e/brick (raw material 0.01, manufacturing 0.49, mortar use 0.18, transport 0.004, EOL ~0). PET brick: -0.66 kg CO2e/brick (raw material 0.81, manufacturing 0.50, avoided burning -1.98, transport 0.002). The significant benefit comes from avoiding methane emissions when diverting 1.8 kg of waste plastic from open burning.</li>
+                    <li><strong>Energy Demand:</strong> Clay brick is significantly more energy-efficient at <strong>7.92 MJ per brick</strong> versus <strong>27.03 MJ for PET</strong> (71% less energy for clay). This counter-intuitive result occurs because PET recycling and raw material processing (13 MJ/kg) is highly energy-intensive. Even the lighter PET brick (1.8 kg) requires 23.4 MJ just for raw material acquisition. Clay manufacturing (2 MJ/kg × 3.5 kg = 7 MJ) dominates clay's lifecycle but is less intensive per kg than PET recycling.</li>
+                    <li><strong>Water Depletion:</strong> Clay brick consumes <strong>2.13 L per brick</strong> versus <strong>4.5 L for PET</strong> (53% reduction). Clay water use is dominated by the manufacturing stage (2.02 L/brick for clay preparation and firing), while PET's water demand comes entirely from recycling facility washing operations (2.5 L/kg recycling × 1.8 kg = 4.5 L/brick).</li>
+                    <li><strong>Particulate Matter (PM2.5):</strong> Clay brick generates <strong>7.53 g PM2.5 per brick</strong> (primary source: kiln firing at 2 g PM2.5/kg × 3.5 kg = 7.0 g, plus 0.53 g from extraction). PET generates zero PM2.5 according to the data inventory. Kiln firing is a significant source of air pollution with public health implications in regions already facing air quality challenges.</li>
+                    <li><strong>System Boundary Trade-offs:</strong> The analysis reveals a critical trade-off between climate and energy: PET excels in climate mitigation (avoided burning credits) and eliminates air pollution from firing, but requires substantially more energy input (71% more per brick). Clay brick is more energy-efficient and uses less water, but generates significant particulate emissions during manufacturing. Neither product is universally "better"—the choice depends on local priorities (climate vs. air quality vs. energy security vs. water availability).</li>
                 </ul>
             </div>
         </div>
@@ -403,27 +404,27 @@ graph LR
             <div class="kpi-container">
                 <div class="kpi-card kpi-benefit">
                     <div class="kpi-icon">♻️</div>
-                    <div class="kpi-value">6.73</div>
+                    <div class="kpi-value">1.35</div>
                     <div class="kpi-label">kg CO2e Saved per Brick</div>
-                    <div class="kpi-detail">PET vs. Clay</div>
+                    <div class="kpi-detail">PET vs. Clay (69% reduction)</div>
                 </div>
                 <div class="kpi-card kpi-benefit">
                     <div class="kpi-icon">⚡</div>
-                    <div class="kpi-value">72%</div>
-                    <div class="kpi-label">Less Energy Needed</div>
-                    <div class="kpi-detail">3.96 vs. 14.21 MJ</div>
+                    <div class="kpi-value">71%</div>
+                    <div class="kpi-label">Less Energy Required</div>
+                    <div class="kpi-detail">Clay: 7.92 vs PET: 27.03 MJ</div>
                 </div>
                 <div class="kpi-card kpi-benefit">
                     <div class="kpi-icon">💧</div>
-                    <div class="kpi-value">74%</div>
-                    <div class="kpi-label">Water Reduction</div>
-                    <div class="kpi-detail">1.12 vs. 4.28 L</div>
+                    <div class="kpi-value">53%</div>
+                    <div class="kpi-label">Less Water Consumed</div>
+                    <div class="kpi-detail">Clay: 2.13 vs PET: 4.5 L</div>
                 </div>
                 <div class="kpi-card kpi-benefit">
-                    <div class="kpi-icon">🫁</div>
-                    <div class="kpi-value">5.67</div>
-                    <div class="kpi-label">g PM2.5 Emissions Avoided</div>
-                    <div class="kpi-detail">Per Brick</div>
+                    <div class="kpi-icon">💨</div>
+                    <div class="kpi-value">7.53</div>
+                    <div class="kpi-label">Clay Air Pollution (PM2.5)</div>
+                    <div class="kpi-detail">g PM2.5 per brick</div>
                 </div>
             </div>
 
